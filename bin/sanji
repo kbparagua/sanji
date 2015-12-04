@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'sanji'
+
+Sanji::AppGenerator.source_paths << Rails::Generators::AppGenerator.source_root
+Sanji::AppGenerator.start
