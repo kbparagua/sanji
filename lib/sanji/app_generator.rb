@@ -5,7 +5,7 @@ module Sanji
   class AppGenerator < Rails::Generators::AppGenerator
 
     def finish_template
-      invoke :sanji_initial_tasks
+      invoke :sanji_after_create_tasks
       super
     end
 
@@ -14,9 +14,9 @@ module Sanji
       super
     end
 
-    def sanji_initial_tasks
+    def sanji_after_create_tasks
       puts 'Starting Sanji customization'
-      build :initial_tasks
+      build :after_create_tasks
     end
 
     def sanji_after_bundle_tasks

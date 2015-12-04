@@ -1,14 +1,14 @@
 class Sanji::Recipes::Annotate < Sanji::Recipes::Base
 
-  def start
+  def after_create
     builder.gem 'annotate'
   end
 
   def after_bundle
-
+    builder.generate 'annotate:install'
   end
 
-  def finish
+  def after_everything
 
   end
 
