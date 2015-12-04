@@ -8,8 +8,4 @@ class Sanji::Recipes::Annotate < Sanji::Recipes::Base
     builder.generate 'annotate:install'
   end
 
-  def after_everything
-
-  end
-
 end
