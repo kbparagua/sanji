@@ -12,6 +12,7 @@ module Sanji
       :Reform,
       :Seedbank,
       :Frontend,
+      :SimpleGems,
       :Cleanup
     ]
 
