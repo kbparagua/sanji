@@ -4,7 +4,8 @@ module Sanji
     RECIPES = [
       :Setup,
       :Annotate,
-      :Draper
+      :Draper,
+      :Cleanup
     ]
 
     def after_create_tasks
