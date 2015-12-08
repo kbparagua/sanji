@@ -13,6 +13,7 @@ module Sanji
       :Seedbank,
       :Frontend,
       :SimpleGems,
+      :Controllers,
       :Cleanup
     ]
 
