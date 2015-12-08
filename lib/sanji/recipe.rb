@@ -3,7 +3,7 @@ class Sanji::Recipe
   attr_reader :a
 
   def initialize builder
-    @a = Sanji::Assistant.new builder
+    @a = Sanji::Assistant.new self, builder
   end
 
   def run_after_create

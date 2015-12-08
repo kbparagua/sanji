@@ -2,7 +2,8 @@ class Sanji::Assistant
 
   attr_reader :builder
 
-  def initialize builder
+  def initialize recipe, builder
+    @recipe = recipe
     @builder = builder
   end
 
@@ -22,7 +23,7 @@ class Sanji::Assistant
   end
 
   def say text
-    complete_text = "#{self.class.name} -> #{text}"
+    complete_text = "#{@recipe.class.name} -> #{text}"
     self.builder.say complete_text, Thor::Shell::Color::YELLOW
   end
 
@@ -34,6 +35,15 @@ class Sanji::Assistant
     self.builder.insert_into_file 'config/application.rb',
       self.text { |t| t.indent(3).puts "g.#{name} #{value}" },
       :after => "# sanji-generators\n"
+  end
+
+
+  # `block` will have an Sanji::Utilities::Text instance as an argument.
+  def application_config &block
+    config = self.text &block
+
+    self.builder.insert_into_file 'config/application.rb', config,
+      :after => "class Application < Rails::Application\n"
   end
 
 end
