@@ -66,4 +66,9 @@ class Sanji::Assistant
     end
   end
 
+  def remove_gem name
+    self.builder.gsub_file 'Gemfile',
+      Regexp.new("^\\s*gem ('|\")#{name}('|\").*\\n"), ''
+  end
+
 end
