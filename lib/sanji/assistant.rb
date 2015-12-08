@@ -9,8 +9,6 @@ class Sanji::Assistant
 
   def method_missing name, *args, &block
     self.builder.send name, *args, &block
-  rescue
-    super
   end
 
 
@@ -44,6 +42,28 @@ class Sanji::Assistant
 
     self.builder.insert_into_file 'config/application.rb', config,
       :after => "class Application < Rails::Application\n"
+  end
+
+  def bundle_exec command = ''
+    self.builder.run "bundle exec #{command}"
+  end
+
+  def add_gem name, version_or_options = nil, extra = nil
+    first_arg =
+      if version_or_options.is_a? String
+        "'#{version_or_options}'"
+      else
+        version_or_options.to_s.gsub /\{|\}/, ''
+      end
+
+    second_arg = extra.to_s.gsub(/\{|\}/, '') if extra
+
+    values = ["'#{name}'", first_arg, second_arg].reject &:blank?
+    entry = values.join ', '
+
+    self.builder.insert_into_file 'Gemfile', :after => "# sanji-gems\n" do
+      "gem #{entry}\n"
+    end
   end
 
 end

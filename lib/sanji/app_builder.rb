@@ -5,6 +5,7 @@ module Sanji
       :Setup,
       :Annotate,
       :Draper,
+      :Figaro,
       :Cleanup
     ]
 
