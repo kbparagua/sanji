@@ -7,6 +7,7 @@ module Sanji
       :Draper,
       :Figaro,
       :Haml,
+      :Paloma,
       :Cleanup
     ]
 
