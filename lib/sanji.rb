@@ -1,6 +1,14 @@
 module Sanji
   module Recipes
   end
+
+  module Utilities
+  end
+end
+
+# Require all utilities
+Dir["#{File.dirname(__FILE__)}/sanji/utilities/*.rb"].each do |filename|
+  require filename.sub('.rb', '')
 end
 
 require 'sanji/recipe'

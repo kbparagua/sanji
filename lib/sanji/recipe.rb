@@ -49,4 +49,14 @@ class Sanji::Recipe
     self.builder.say complete_text, Thor::Shell::Color::YELLOW
   end
 
+  def text &block
+    Sanji::Utilities::Text.create &block
+  end
+
+  def generator name, value
+    self.builder.insert_into_file 'config/application.rb',
+      self.text { |t| t.indent(3).puts "g.#{name} #{value}" },
+      :after => "# sanji-generators\n"
+  end
+
 end

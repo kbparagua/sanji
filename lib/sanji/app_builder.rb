@@ -2,7 +2,9 @@ module Sanji
   class AppBuilder < Rails::AppBuilder
 
     RECIPES = [
-      :Annotate
+      :Setup,
+      :Annotate,
+      :Draper
     ]
 
     def after_create_tasks
