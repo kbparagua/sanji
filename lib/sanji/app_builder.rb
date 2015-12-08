@@ -8,6 +8,7 @@ module Sanji
       :Figaro,
       :Haml,
       :Paloma,
+      :Postgresql,
       :Cleanup
     ]
 

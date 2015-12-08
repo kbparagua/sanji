@@ -71,4 +71,8 @@ class Sanji::Assistant
       Regexp.new("^\\s*gem ('|\")#{name}('|\").*\\n"), ''
   end
 
+  def delete_file filename
+    self.builder.run "rm #{filename}"
+  end
+
 end

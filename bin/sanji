@@ -2,5 +2,13 @@
 
 require 'sanji'
 
-Sanji::AppGenerator.source_paths << Rails::Generators::AppGenerator.source_root
+templates_root =
+  File.expand_path(File.join('..', 'templates'), File.dirname(__FILE__))
+
+Sanji::AppGenerator.source_root templates_root
+
+Sanji::AppGenerator.source_paths <<
+  Rails::Generators::AppGenerator.source_root <<
+  templates_root
+
 Sanji::AppGenerator.start
