@@ -10,6 +10,7 @@ module Sanji
       :Paloma,
       :Postgresql,
       :Reform,
+      :Seedbank,
       :Cleanup
     ]
 
