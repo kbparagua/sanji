@@ -12,16 +12,19 @@ module Sanji
     def run_after_bundle_callbacks
       invoke :sanji_after_bundle_tasks
       super
+      invoke :sanji_after_everything_tasks
     end
 
     def sanji_after_create_tasks
-      puts 'Starting Sanji customization'
       build :after_create_tasks
     end
 
     def sanji_after_bundle_tasks
-      puts 'Running Sanji after_bundle tasks'
       build :after_bundle_tasks
+    end
+
+    def sanji_after_everything_tasks
+      build :after_everything_tasks
     end
 
 

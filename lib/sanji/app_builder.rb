@@ -5,7 +5,6 @@ module Sanji
       :Annotate
     ]
 
-
     def after_create_tasks
       RECIPES.each do |name|
         self.get_recipe_instance(name).run_after_create
@@ -29,8 +28,18 @@ module Sanji
     protected
 
     def get_recipe_instance name
+      recipe = self.recipe_instances[name]
+      return recipe if recipe
+
       recipe_class = ::Sanji::Recipes.const_get name
-      recipe_class.new self
+      recipe = recipe_class.new self
+
+      self.recipe_instances[name] = recipe
+      recipe
+    end
+
+    def recipe_instances
+      @recipe_instances ||= {}
     end
 
   end
