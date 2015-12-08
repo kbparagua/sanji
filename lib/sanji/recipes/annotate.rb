@@ -1,4 +1,4 @@
-class Sanji::Recipes::Annotate < Sanji::Recipes::Base
+class Sanji::Recipes::Annotate < Sanji::Recipe
 
   def after_create
     builder.gem 'annotate'

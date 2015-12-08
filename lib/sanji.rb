@@ -1,11 +1,12 @@
 module Sanji
+  module Recipes
+  end
 end
 
-require 'sanji/recipes/base'
+require 'sanji/recipe'
 
+# Require all recipes
 Dir["#{File.dirname(__FILE__)}/sanji/recipes/*.rb"].each do |filename|
-  next if filename.index 'base.rb'
-
   require filename.sub('.rb', '')
 end
 
