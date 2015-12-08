@@ -12,18 +12,6 @@ class Sanji::Assistant
   end
 
 
-  def log_start method_name
-    self.say "start ##{method_name}"
-  end
-
-  def log_end method_name
-    self.say "end ##{method_name}"
-  end
-
-  def say text
-    complete_text = "#{@recipe.class.name} -> #{text}"
-    self.builder.say complete_text, Thor::Shell::Color::YELLOW
-  end
 
   def text &block
     Sanji::Utilities::Text.create &block
@@ -73,6 +61,36 @@ class Sanji::Assistant
 
   def delete_file filename
     self.builder.run "rm #{filename}"
+  end
+
+  def log_start method_name
+    self.say "start ##{method_name}"
+  end
+
+  def log_end method_name
+    self.say "end ##{method_name}"
+  end
+
+  def say text
+    self.builder.say recipe_message(text), Thor::Shell::Color::YELLOW
+  end
+
+  def ask question
+    self.builder.ask recipe_message(question)
+  end
+
+  def yes? question
+    self.builder.yes? recipe_message("#{question} (y/n)")
+  end
+
+  def no? question
+    self.builder.no? recipe_message("#{question} (y/n)")
+  end
+
+  private
+
+  def recipe_message message = ''
+    "#{@recipe.class.name} -> #{message}"
   end
 
 end

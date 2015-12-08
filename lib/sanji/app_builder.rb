@@ -11,6 +11,7 @@ module Sanji
       :Postgresql,
       :Reform,
       :Seedbank,
+      :Frontend,
       :Cleanup
     ]
 
