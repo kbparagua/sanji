@@ -9,6 +9,7 @@ module Sanji
       :Haml,
       :Paloma,
       :Postgresql,
+      :Reform,
       :Cleanup
     ]
 
