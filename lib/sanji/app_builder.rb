@@ -14,6 +14,7 @@ module Sanji
       :Frontend,
       :SimpleGems,
       :Controllers,
+      :Devise,
       :Cleanup
     ]
 
