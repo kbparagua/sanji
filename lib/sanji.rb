@@ -11,6 +11,8 @@ Dir["#{File.dirname(__FILE__)}/sanji/utilities/*.rb"].each do |filename|
   require filename.sub('.rb', '')
 end
 
+
+require 'sanji/assistant'
 require 'sanji/recipe'
 
 # Require all recipes
