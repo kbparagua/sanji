@@ -6,6 +6,7 @@ module Sanji
       :Annotate,
       :Draper,
       :Figaro,
+      :Haml,
       :Cleanup
     ]
 
