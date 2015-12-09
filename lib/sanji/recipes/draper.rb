@@ -1,5 +1,9 @@
 class Sanji::Recipes::Draper < Sanji::Recipe
 
+  def prompt
+    'Do you want to use Draper?'
+  end
+
   def after_create
     a.add_gem 'draper'
     a.generator :decorator, false
