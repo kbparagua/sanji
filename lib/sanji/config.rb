@@ -5,7 +5,7 @@ class Sanji::Config
   attr_reader :contents
 
   def initialize filename = nil
-    @contents = YAML.load_file(filename) if filename.present?
+    @contents = YAML.load_file(filename) if filename
   end
 
   def cookbook
@@ -24,6 +24,10 @@ class Sanji::Config
   def recipes
     return [] unless self.contents
     self.cookbooks[self.cookbook]
+  end
+
+  def recipes_path
+    self.contents['recipes'] if self.contents
   end
 
 end

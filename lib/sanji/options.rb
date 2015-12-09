@@ -18,6 +18,11 @@ class Sanji::Options
     @user_config = self.fetch_user_config
   end
 
+  def user_recipes_path
+    return nil if self.user_home_path.blank?
+    "#{self.user_home_path}/#{@user_config.recipes_path}"
+  end
+
   def cookbook
     @cookbook ||= @user_config.cookbook || @default_config.cookbook
   end
@@ -49,9 +54,13 @@ class Sanji::Options
 
   protected
 
+  def user_home_path
+    @user_home_path ||= ENV[HOME_PATH_ENV_VARIABLE]
+  end
+
   def fetch_user_config
-    user_home_path = ENV[HOME_PATH_ENV_VARIABLE]
-    filename = user_home_path ? "#{user_home_path}/#{CONFIG_FILENAME}" : nil
+    filename =
+      user_home_path ? "#{self.user_home_path}/#{CONFIG_FILENAME}" : nil
 
     Sanji::Config.new filename
   end

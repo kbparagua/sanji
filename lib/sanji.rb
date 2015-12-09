@@ -17,15 +17,22 @@ Dir["#{File.dirname(__FILE__)}/sanji/utilities/*.rb"].each do |filename|
   require filename.sub('.rb', '')
 end
 
-
 require 'sanji/assistant'
 require 'sanji/recipe'
+require 'sanji/app_generator'
+require 'sanji/app_builder'
 
 # Require all recipes
 Dir["#{File.dirname(__FILE__)}/sanji/recipes/*.rb"].each do |filename|
   require filename.sub('.rb', '')
 end
 
-require 'sanji/app_generator'
-require 'sanji/app_builder'
+# Require user recipes
+if Sanji::Options.instance.user_recipes_path
+  Dir["#{Sanji::Options.instance.user_recipes_path}/*.rb"].each do |filename|
+    require filename.sub('.rb', '')
+  end
+end
+
+
 

@@ -1,5 +1,4 @@
 cookbook: _basic
-recipes: ./sanji/recipes/
 
 cookbooks:
   basic:
