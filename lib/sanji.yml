@@ -2,7 +2,6 @@ cookbook: _basic
 
 cookbooks:
   basic:
-  - _setup
   - _annotate
   - _draper
   - _figaro
@@ -15,4 +14,3 @@ cookbooks:
   - _simple_gems
   - _controllers
   - _devise
-  - _cleanup
