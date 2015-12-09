@@ -58,3 +58,20 @@ end
     my_cookbook:
     - my_recipe
   ```
+
+## Inclusions
+
+- Gems
+  - pg - PostgreSQL adapter.
+  - seedbank - Organize seeds.
+  - annotate - Model annotations.
+  - figaro - Read environment variables.
+  - haml-rails - View template engine.
+  - draper - Decorator for views.
+  - reform - Form objects.
+  - virtus - Coercion for Form objects.
+  - normalize-rails - CSS Reset (if bootstrap is not selected).
+  - paperclip - Attachments for models.
+  - kaminari - Pagination.
+  - thin - Development web server.
+  - quiet_assets - Prevent asset logs.
