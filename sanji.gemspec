@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'sanji'
-  s.version = '1.0.0.pre.1'
+  s.version = '1.0.0.pre.2'
   s.description = 'rails application generator'
   s.summary = 'rails application generator'
   s.authors = ['Karl Paragua']
