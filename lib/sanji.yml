@@ -2,15 +2,13 @@ cookbook: _basic
 
 cookbooks:
   basic:
+  - _postgresql
+  - _seedbank
   - _annotate
-  - _draper
   - _figaro
   - _haml
+  - _draper
   - _paloma
-  - _postgresql
   - _reform
-  - _seedbank
   - _frontend
   - _simple_gems
-  - _controllers
-  - _devise
