@@ -13,7 +13,7 @@ class Sanji::Recipes::Cleanup < Sanji::Recipe
   protected
 
   def remove_gemfile_comments
-    a.gsub_file 'Gemfile', /#.*\n/, ''
+    a.gsub_file 'Gemfile', /^\s*#.*\n/, ''
   end
 
 end
