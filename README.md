@@ -22,6 +22,10 @@ sanji app_name
 ```ruby
 class Sanji::Locals::MyRecipe < Sanji::Recipe
 
+  def prompt
+    # return a string (boolean question) to make this recipe optional
+  end
+  
   def after_create
     # execute after app is created
   end
