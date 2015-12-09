@@ -70,6 +70,7 @@ end
   - draper - Decorator for views.
   - reform - Form objects.
   - virtus - Coercion for Form objects.
+  - bootstrap-sass - Twitter Bootstrap CSS and Javascripts (optional).
   - normalize-rails - CSS Reset (if bootstrap is not selected).
   - paperclip - Attachments for models.
   - kaminari - Pagination.
