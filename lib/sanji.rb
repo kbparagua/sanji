@@ -9,6 +9,8 @@ module Sanji
   end
 end
 
+require 'sanji/config'
+require 'sanji/options'
 
 # Require all utilities
 Dir["#{File.dirname(__FILE__)}/sanji/utilities/*.rb"].each do |filename|

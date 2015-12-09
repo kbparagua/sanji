@@ -1,38 +1,21 @@
 module Sanji
   class AppBuilder < Rails::AppBuilder
 
-    RECIPES = [
-      :Setup,
-      :Annotate,
-      :Draper,
-      :Figaro,
-      :Haml,
-      :Paloma,
-      :Postgresql,
-      :Reform,
-      :Seedbank,
-      :Frontend,
-      :SimpleGems,
-      :Controllers,
-      :Devise,
-      :Cleanup
-    ]
-
     def after_create_tasks
-      RECIPES.each do |name|
-        self.get_recipe_instance(name).run_after_create
+      self.recipe_classes.each do |recipe_class|
+        self.get_recipe_instance(recipe_class).run_after_create
       end
     end
 
     def after_bundle_tasks
-      RECIPES.each do |name|
-        self.get_recipe_instance(name).run_after_bundle
+      self.recipe_classes.each do |recipe_class|
+        self.get_recipe_instance(recipe_class).run_after_bundle
       end
     end
 
     def after_everything_tasks
-      RECIPES.each do |name|
-        self.get_recipe_instance(name).run_after_everything
+      self.recipe_classes.each do |recipe_class|
+        self.get_recipe_instance(recipe_class).run_after_everything
       end
     end
 
@@ -40,14 +23,17 @@ module Sanji
 
     protected
 
-    def get_recipe_instance name
-      recipe = self.recipe_instances[name]
+    def recipe_classes
+      Options.instance.recipe_classes
+    end
+
+    def get_recipe_instance recipe_class
+      recipe = self.recipe_instances[recipe_class.name.to_sym]
       return recipe if recipe
 
-      recipe_class = ::Sanji::Recipes.const_get name
       recipe = recipe_class.new self
 
-      self.recipe_instances[name] = recipe
+      self.recipe_instances[recipe_class.name.to_sym] = recipe
       recipe
     end
 

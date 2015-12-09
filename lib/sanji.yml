@@ -1,0 +1,19 @@
+cookbook: _basic
+recipes: ./sanji/recipes/
+
+cookbooks:
+  basic:
+  - _setup
+  - _annotate
+  - _draper
+  - _figaro
+  - _haml
+  - _paloma
+  - _postgresql
+  - _reform
+  - _seedbank
+  - _frontend
+  - _simple_gems
+  - _controllers
+  - _devise
+  - _cleanup
