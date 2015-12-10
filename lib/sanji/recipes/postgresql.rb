@@ -7,6 +7,13 @@ class Sanji::Recipes::Postgresql < Sanji::Recipe
     self.create_database_yml
   end
 
+  def after_bundle
+    if a.yes?('Drop and create database?')
+      a.rake 'db:drop'
+      a.rake 'db:create'
+    end
+  end
+
 
   protected
 
