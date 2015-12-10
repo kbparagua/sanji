@@ -9,6 +9,7 @@ module Sanji
   end
 end
 
+require 'sanji/item'
 require 'sanji/config'
 require 'sanji/options'
 
