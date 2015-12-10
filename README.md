@@ -1,9 +1,9 @@
 # sanji
 
+![sanji](http://icons.iconarchive.com/icons/crountch/one-piece-character/256/Sanji-icon.png)
+
 Customized Rails application generator.
 Inspired by [suspenders](https://github.com/thoughtbot/suspenders) and [rails_apps_composer](https://github.com/RailsApps/rails_apps_composer) gems.
-
-![sanji](http://icons.iconarchive.com/icons/crountch/one-piece-character/256/Sanji-icon.png)
 
 ## Installation
 
