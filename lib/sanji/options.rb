@@ -34,6 +34,10 @@ class Sanji::Options
   protected
 
   def recipe_names
+    @recipe_names ||= self.cookbook_entry['recipes']
+  end
+
+  def cookbook_entry
     return @cookbook_entry if @cookbook_entry
 
     @cookbook_entry =
