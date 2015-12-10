@@ -5,6 +5,7 @@ class Sanji::Options
 
   CONFIG_FILENAME = 'sanji.yml'
 
+
   def self.instance
     @instance ||= self.new
   end
@@ -21,47 +22,33 @@ class Sanji::Options
     "#{self.user_home_path}/#{@user_config.recipes_path}"
   end
 
-  def cookbook
-    return @cookbook if @cookbook
-
-    cookbook_name = @user_config.cookbook || @default_config.cookbook
-    @cookbook = Sanji::Item.new cookbook_name
-  end
-
-  def sanji_cookbook?
-    self.cookbook.belongs_to_sanji?
-  end
-
   def recipe_classes
     @recipes ||=
-      self.cookbook_recipe_names.map do |recipe_name|
+      self.recipe_names.map do |recipe_name|
         self.get_recipe_class recipe_name
       end
   end
 
-  def cookbook_recipe_names
+
+
+  protected
+
+  def recipe_names
     return @cookbook_entry if @cookbook_entry
 
     @cookbook_entry =
-      if self.sanji_cookbook?
+      if self.cookbook.belongs_to_sanji?
         @default_config.cookbooks[self.cookbook.key_name]
       else
         @user_config.cookbooks[self.cookbook.key_name]
       end
   end
 
+  def cookbook
+    return @cookbook if @cookbook
 
-  protected
-
-  def user_home_path
-    @user_home_path ||= ENV[HOME_PATH_ENV_VARIABLE]
-  end
-
-  def fetch_user_config
-    filename =
-      user_home_path ? "#{self.user_home_path}/#{CONFIG_FILENAME}" : nil
-
-    Sanji::Config.new filename
+    cookbook_name = @user_config.cookbook || @default_config.cookbook
+    @cookbook = Sanji::Item.new cookbook_name
   end
 
   def get_recipe_class recipe_name
@@ -72,6 +59,17 @@ class Sanji::Options
     else
       Sanji::Locals.const_get recipe.class_name
     end
+  end
+
+  def fetch_user_config
+    filename =
+      user_home_path ? "#{self.user_home_path}/#{CONFIG_FILENAME}" : nil
+
+    Sanji::Config.new filename
+  end
+
+  def user_home_path
+    @user_home_path ||= ENV[HOME_PATH_ENV_VARIABLE]
   end
 
 end
