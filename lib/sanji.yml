@@ -14,3 +14,4 @@ cookbooks:
   - _simple_gems
   - _public_module
   - _admin_namespace
+  - _readme
