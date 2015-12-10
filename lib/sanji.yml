@@ -8,8 +8,8 @@ cookbooks:
   - _figaro
   - _haml
   - _draper
-  - _paloma
   - _reform
+  - _paloma
   - _frontend
   - _simple_gems
   - _public_module
