@@ -16,7 +16,14 @@ class Sanji::Recipes::AdminNamespace < Sanji::Recipe
   end
 
   def after_everything
-    self.create_layout if a.yes? 'Create admin layout?'
+    if a.yes? 'Create admin layout?'
+      self.create_layout
+
+      a.insert_into_file 'app/controllers/admin/base_controller.rb',
+        :after => /ApplicationController\n/ do
+          a.text { |t| t.indent.puts "layout 'admin'" }
+        end
+    end
   end
 
 
