@@ -12,3 +12,4 @@ cookbooks:
   - _reform
   - _frontend
   - _simple_gems
+  - _admin_namespace
