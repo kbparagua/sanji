@@ -22,18 +22,18 @@ sanji app_name
 ```ruby
 class Sanji::Locals::MyRecipe < Sanji::Recipe
 
-  def prompt
+  def confirm
     # return a string (boolean question) to make this recipe optional
   end
-  
+
   def after_create
     # execute after app is created
   end
-  
+
   def after_bundle
     # execute after bundle
   end
-  
+
   def after_everything
     # execute after "after_bundle"
   end
@@ -52,13 +52,13 @@ end
   ```ruby
   cookbook: cookbook_name
   recipes: /path/to/recipes
-  
+
   cookbooks:
     cookbook_name:
     - recipe_name
     - other_recipe_name
     - another_recipe
-    
+
     my_cookbook:
     - my_recipe
   ```

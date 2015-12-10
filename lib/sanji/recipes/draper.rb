@@ -1,6 +1,6 @@
 class Sanji::Recipes::Draper < Sanji::Recipe
 
-  def prompt
+  def confirm
     'Do you want to use Draper?'
   end
 

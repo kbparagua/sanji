@@ -8,7 +8,7 @@ class Sanji::Recipe
   end
 
   def run_after_create
-    @disabled = a.no?(self.prompt) if self.prompt.present?
+    @disabled = a.no?(self.confirm) if self.confirm.present?
     return if @disabled
 
     a.log_start :after_create
@@ -41,7 +41,7 @@ class Sanji::Recipe
   def after_everything
   end
 
-  def prompt
+  def confirm
   end
 
 end
