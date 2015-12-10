@@ -16,3 +16,7 @@ cookbooks:
     - _public_module
     - _admin_namespace
     - _readme
+
+    optional:
+    - _draper
+    - _reform

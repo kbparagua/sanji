@@ -29,12 +29,25 @@ class Sanji::Options
       end
   end
 
+  def optional? recipe_class
+    self.optional_recipe_classes.include? recipe_class
+  end
+
 
 
   protected
 
   def recipe_names
     @recipe_names ||= self.cookbook_entry['recipes']
+  end
+
+  def optional_recipe_classes
+    return [] unless self.cookbook_entry.has_key?('optional')
+
+    @optional_recipe_classes ||=
+      self.cookbook_entry['optional'].map do |recipe_name|
+        self.get_recipe_class recipe_name
+      end
   end
 
   def cookbook_entry

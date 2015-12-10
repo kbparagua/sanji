@@ -7,8 +7,12 @@ class Sanji::Recipe
     @disabled = false
   end
 
+  def optional?
+    Sanji::Options.instance.optional? self.class
+  end
+
   def run_after_create
-    @disabled = a.no?(self.confirm) if self.confirm.present?
+    @disabled = !self.confirm? if self.optional?
     return if @disabled
 
     a.log_start :after_create
@@ -41,7 +45,15 @@ class Sanji::Recipe
   def after_everything
   end
 
-  def confirm
+  def confirm?
+    if self.description.present?
+      a.say "Description: #{self.description}"
+    end
+
+    a.yes? 'Do you want to run this recipe?'
+  end
+
+  def description
   end
 
 end
