@@ -1,7 +1,7 @@
 class Sanji::Recipes::Draper < Sanji::Recipe
 
-  def confirm
-    'Do you want to use Draper?'
+  def description
+    'Decorator for views'
   end
 
   def after_create

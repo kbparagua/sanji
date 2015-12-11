@@ -2,16 +2,21 @@ cookbook: _basic
 
 cookbooks:
   basic:
-  - _postgresql
-  - _seedbank
-  - _annotate
-  - _figaro
-  - _haml
-  - _draper
-  - _reform
-  - _paloma
-  - _frontend
-  - _simple_gems
-  - _public_module
-  - _admin_namespace
-  - _readme
+    recipes:
+    - _postgresql
+    - _seedbank
+    - _annotate
+    - _figaro
+    - _haml
+    - _draper
+    - _reform
+    - _paloma
+    - _frontend
+    - _simple_gems
+    - _public_module
+    - _admin_namespace
+    - _readme
+
+    optional:
+    - _draper
+    - _reform

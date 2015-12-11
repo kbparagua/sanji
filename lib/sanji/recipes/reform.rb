@@ -1,9 +1,5 @@
 class Sanji::Recipes::Reform < Sanji::Recipe
 
-  def confirm
-    'Do you want to use Reform?'
-  end
-
   def after_create
     a.add_gem 'reform'
     a.add_gem 'virtus'

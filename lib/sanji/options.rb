@@ -4,7 +4,6 @@ class Sanji::Options
   HOME_PATH_ENV_VARIABLE = 'SANJI_HOME'
 
   CONFIG_FILENAME = 'sanji.yml'
-  SANJI_ITEMS_PREFIX = '_'
 
 
   def self.instance
@@ -23,39 +22,60 @@ class Sanji::Options
     "#{self.user_home_path}/#{@user_config.recipes_path}"
   end
 
-  def cookbook
-    @cookbook ||= @user_config.cookbook || @default_config.cookbook
-  end
-
-  def sanji_cookbook?
-    self.is_sanji_item? self.cookbook
-  end
-
   def recipe_classes
     @recipes ||=
-      self.cookbook_recipe_names.map do |recipe_name|
+      self.recipe_names.map do |recipe_name|
         self.get_recipe_class recipe_name
       end
   end
 
-  def cookbook_recipe_names
-    return @cookbook_entry if @cookbook_entry
-
-    cookbook_valid_name = self.valid_item_name self.cookbook
-
-    @cookbook_entry =
-      if self.sanji_cookbook?
-        @default_config.cookbooks[cookbook_valid_name]
-      else
-        @user_config.cookbooks[cookbook_valid_name]
-      end
+  def optional? recipe_class
+    self.optional_recipe_classes.include? recipe_class
   end
+
 
 
   protected
 
-  def user_home_path
-    @user_home_path ||= ENV[HOME_PATH_ENV_VARIABLE]
+  def recipe_names
+    @recipe_names ||= self.cookbook_entry['recipes']
+  end
+
+  def optional_recipe_classes
+    return [] unless self.cookbook_entry.has_key?('optional')
+
+    @optional_recipe_classes ||=
+      self.cookbook_entry['optional'].map do |recipe_name|
+        self.get_recipe_class recipe_name
+      end
+  end
+
+  def cookbook_entry
+    return @cookbook_entry if @cookbook_entry
+
+    @cookbook_entry =
+      if self.cookbook.belongs_to_sanji?
+        @default_config.cookbooks[self.cookbook.key_name]
+      else
+        @user_config.cookbooks[self.cookbook.key_name]
+      end
+  end
+
+  def cookbook
+    return @cookbook if @cookbook
+
+    cookbook_name = @user_config.cookbook || @default_config.cookbook
+    @cookbook = Sanji::Item.new cookbook_name
+  end
+
+  def get_recipe_class recipe_name
+    recipe = Sanji::Item.new recipe_name
+
+    if recipe.belongs_to_sanji?
+      Sanji::Recipes.const_get recipe.class_name
+    else
+      Sanji::Locals.const_get recipe.class_name
+    end
   end
 
   def fetch_user_config
@@ -65,27 +85,8 @@ class Sanji::Options
     Sanji::Config.new filename
   end
 
-  def is_sanji_item? item_name
-    item_name.start_with? SANJI_ITEMS_PREFIX
-  end
-
-  def valid_item_name item_name
-    if self.is_sanji_item? item_name
-      return item_name.sub SANJI_ITEMS_PREFIX, ''
-    end
-
-    item_name
-  end
-
-  def get_recipe_class name
-    recipe_valid_name = self.valid_item_name name
-    recipe_class_name = recipe_valid_name.camelize
-
-    if self.is_sanji_item? name
-      Sanji::Recipes.const_get recipe_class_name
-    else
-      Sanji::Locals.const_get recipe_class_name
-    end
+  def user_home_path
+    @user_home_path ||= ENV[HOME_PATH_ENV_VARIABLE]
   end
 
 end
