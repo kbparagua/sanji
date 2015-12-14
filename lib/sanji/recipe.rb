@@ -2,8 +2,14 @@ class Sanji::Recipe
 
   attr_reader :a
 
-  def initialize builder
-    @a = Sanji::Assistant.new self, builder
+  def self.instance
+    @instance ||= self.new
+  end
+
+
+
+  def initialize
+    @a = Sanji::Assistant.instance
     @disabled = false
   end
 
@@ -12,28 +18,43 @@ class Sanji::Recipe
   end
 
   def run_after_create
+    a.active_recipe = self
+
     @disabled = !self.confirm? if self.optional?
-    return if @disabled
+    if @disabled
+      a.active_recipe = nil
+      return
+    end
 
     a.log_start :after_create
     self.after_create
     a.log_end :after_create
+
+    a.active_recipe = nil
   end
 
   def run_after_bundle
     return if @disabled
 
+    a.active_recipe = self
+
     a.log_start :after_bundle
     self.after_bundle
     a.log_end :after_bundle
+
+    a.active_recipe = nil
   end
 
   def run_after_everything
     return if @disabled
 
+    a.active_recipe = self
+
     a.log_start :after_everything
     self.after_everything
     a.log_end :after_everything
+
+    a.active_recipe = nil
   end
 
   def after_create

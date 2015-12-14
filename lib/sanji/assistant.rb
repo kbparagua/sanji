@@ -1,9 +1,19 @@
 class Sanji::Assistant
 
+  attr_accessor :active_recipe
   attr_reader :builder
 
-  def initialize recipe, builder
-    @recipe = recipe
+  def self.initialize_instance builder
+    @instance = self.new(builder)
+  end
+
+  def self.instance
+    @instance
+  end
+
+
+
+  def initialize builder
     @builder = builder
   end
 
@@ -90,7 +100,7 @@ class Sanji::Assistant
   private
 
   def recipe_message message = ''
-    "#{@recipe.class.name} -> #{message}"
+    "#{self.active_recipe.class.name} -> #{message}"
   end
 
 end

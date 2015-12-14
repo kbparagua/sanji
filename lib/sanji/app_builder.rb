@@ -1,34 +1,39 @@
 module Sanji
   class AppBuilder < Rails::AppBuilder
 
+    def initialize app_base
+      super app_base
+      Assistant.initialize_instance self
+    end
+
     def after_create_tasks
-      self.setup_recipe.run_after_create
+      Recipes::Setup.instance.run_after_create
 
       self.recipe_classes.each do |recipe_class|
-        self.get_recipe_instance(recipe_class).run_after_create
+        recipe_class.instance.run_after_create
       end
 
-      self.cleanup_recipe.run_after_create
+      Recipes::Cleanup.instance.run_after_create
     end
 
     def after_bundle_tasks
-      self.setup_recipe.run_after_bundle
+      Recipes::Setup.instance.run_after_bundle
 
       self.recipe_classes.each do |recipe_class|
-        self.get_recipe_instance(recipe_class).run_after_bundle
+        recipe_class.instance.run_after_bundle
       end
 
-      self.cleanup_recipe.run_after_bundle
+      Recipes::Cleanup.instance.run_after_bundle
     end
 
     def after_everything_tasks
-      self.setup_recipe.run_after_everything
+      Recipes::Setup.instance.run_after_everything
 
       self.recipe_classes.each do |recipe_class|
-        self.get_recipe_instance(recipe_class).run_after_everything
+        recipe_class.instance.run_after_everything
       end
 
-      self.cleanup_recipe.run_after_everything
+      Recipes::Cleanup.instance.run_after_everything
     end
 
 
@@ -37,28 +42,6 @@ module Sanji
 
     def recipe_classes
       Options.instance.recipe_classes
-    end
-
-    def get_recipe_instance recipe_class
-      recipe = self.recipe_instances[recipe_class.name.to_sym]
-      return recipe if recipe
-
-      recipe = recipe_class.new self
-
-      self.recipe_instances[recipe_class.name.to_sym] = recipe
-      recipe
-    end
-
-    def recipe_instances
-      @recipe_instances ||= {}
-    end
-
-    def setup_recipe
-      @setup_recipe ||= Sanji::Recipes::Setup.new(self)
-    end
-
-    def cleanup_recipe
-      @cleanup_recipe ||= Sanji::Recipes::Cleanup.new(self)
     end
 
   end
