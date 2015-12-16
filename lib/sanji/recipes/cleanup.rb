@@ -37,11 +37,19 @@ class Sanji::Recipes::Cleanup < Sanji::Recipe
     File.open("#{a.destination_root}/Gemfile", 'w'){ |f| f.truncate(0) }
 
     non_group_statements = gem_groups.delete :root
-    non_group_statements.each { |line| a.append_to_file 'Gemfile', line }
+    non_group_statements.each do |line|
+      line = "#{line}\n" unless line.include?("\n")
+      a.append_to_file 'Gemfile', line
+    end
 
     gem_groups.each do |group, lines|
       a.append_to_file 'Gemfile', "group #{group} do\n"
-      lines.each { |line| a.append_to_file 'Gemfile', line }
+
+      lines.each do |line|
+        line = "#{line}\n" unless line.include?("\n")
+        a.append_to_file 'Gemfile', line
+      end
+
       a.append_to_file 'Gemfile', "end\n"
     end
   end
