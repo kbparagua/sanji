@@ -28,7 +28,7 @@ class Sanji::Recipes::Frontend < Sanji::Recipe
   end
 
   def setup_bootstrap
-    a.add_gem 'bootstrap-sass'
+    a.gem 'bootstrap-sass'
 
     a.append_to_file 'app/assets/stylesheets/application.scss' do
       "@import 'bootstrap-sprockets';\n" \
@@ -41,7 +41,7 @@ class Sanji::Recipes::Frontend < Sanji::Recipe
   end
 
   def setup_normalize
-    a.add_gem 'normalize-rails'
+    a.gem 'normalize-rails'
 
     a.append_to_file 'app/assets/stylesheets/application.scss' do
       "@import 'normalize-rails';\n"

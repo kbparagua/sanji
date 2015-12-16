@@ -2,7 +2,7 @@ class Sanji::Recipes::Setup < Sanji::Recipe
 
   def after_create
     self.add_generators_block
-    self.add_gemfile_marker
+    self.gemfile_marker
   end
 
 
@@ -16,7 +16,7 @@ class Sanji::Recipes::Setup < Sanji::Recipe
     end
   end
 
-  def add_gemfile_marker
+  def gemfile_marker
     a.append_to_file 'Gemfile' do
       "# sanji-gems\n"
     end

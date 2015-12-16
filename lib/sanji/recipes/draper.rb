@@ -5,7 +5,7 @@ class Sanji::Recipes::Draper < Sanji::Recipe
   end
 
   def after_create
-    a.add_gem 'draper'
+    a.gem 'draper'
     a.generator :decorator, false
   end
 

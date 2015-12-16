@@ -1,7 +1,7 @@
 class Sanji::Recipes::Devise < Sanji::Recipe
 
   def after_create
-    a.add_gem 'devise', '~> 3.0.0'
+    a.gem 'devise', '~> 3.0.0'
   end
 
   def after_bundle
