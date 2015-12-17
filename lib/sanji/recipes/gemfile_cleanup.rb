@@ -1,5 +1,3 @@
-require 'pp'
-
 class Sanji::Recipes::GemfileCleanup < Sanji::Recipe
 
   def after_everything
