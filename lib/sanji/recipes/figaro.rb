@@ -1,7 +1,7 @@
 class Sanji::Recipes::Figaro < Sanji::Recipe
 
   def after_create
-    a.add_gem 'figaro'
+    a.gem 'figaro'
 
     self.create_application_yml_sample
   end

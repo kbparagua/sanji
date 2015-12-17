@@ -1,10 +1,11 @@
 class Sanji::Recipes::SimpleGems < Sanji::Recipe
 
   def after_create
-    [:paperclip, :kaminari].each { |name| a.add_gem name }
+    ['paperclip', 'kaminari'].each { |name| a.gem name }
 
-    [:thin, :quiet_assets].each do |name|
-      a.add_gem name, :group => [:development, :test]
+    a.gem_group :development, :test do
+      gem 'thin'
+      gem 'quiet_assets'
     end
   end
 

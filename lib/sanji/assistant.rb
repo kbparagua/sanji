@@ -46,22 +46,12 @@ class Sanji::Assistant
     self.builder.run "bundle exec #{command}"
   end
 
-  def add_gem name, version_or_options = nil, extra = nil
-    first_arg =
-      if version_or_options.is_a? String
-        "'#{version_or_options}'"
-      else
-        version_or_options.to_s.gsub /\{|\}/, ''
-      end
-
-    second_arg = extra.to_s.gsub(/\{|\}/, '') if extra
-
-    values = ["'#{name}'", first_arg, second_arg].reject &:blank?
-    entry = values.join ', '
-
-    self.builder.insert_into_file 'Gemfile', :after => "# sanji-gems\n" do
-      "gem #{entry}\n"
-    end
+  # NOTE: Need to manually do this because it appears that
+  # bundler is adding `gem` method to all classes.
+  #
+  # Need to investigate further.
+  def gem *args
+    self.builder.gem *args
   end
 
   def remove_gem name

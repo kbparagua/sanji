@@ -2,7 +2,7 @@ class Sanji::Recipes::Postgresql < Sanji::Recipe
 
   def after_create
     a.remove_gem 'sqlite3'
-    a.add_gem 'pg'
+    a.gem 'pg'
 
     self.create_database_yml
   end

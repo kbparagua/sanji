@@ -1,8 +1,8 @@
 class Sanji::Recipes::Reform < Sanji::Recipe
 
   def after_create
-    a.add_gem 'reform'
-    a.add_gem 'virtus'
+    a.gem 'reform'
+    a.gem 'virtus'
   end
 
   def after_bundle

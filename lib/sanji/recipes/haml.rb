@@ -1,7 +1,7 @@
 class Sanji::Recipes::Haml < Sanji::Recipe
 
   def after_create
-    a.add_gem 'haml-rails'
+    a.gem 'haml-rails'
   end
 
   def after_everything

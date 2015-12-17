@@ -1,7 +1,7 @@
 class Sanji::Recipes::Annotate < Sanji::Recipe
 
   def after_create
-    a.add_gem 'annotate'
+    a.gem 'annotate'
   end
 
   def after_bundle
