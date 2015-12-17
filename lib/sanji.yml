@@ -16,6 +16,7 @@ cookbooks:
     - _public_module
     - _admin_namespace
     - _readme
+    - _gemfile_cleanup
 
     optional:
     - _draper
