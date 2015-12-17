@@ -1,9 +1,5 @@
 class Sanji::Recipes::Draper < Sanji::Recipe
 
-  def description
-    'Decorator for views'
-  end
-
   def after_create
     a.gem 'draper'
     a.generator :decorator, false

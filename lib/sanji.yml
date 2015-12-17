@@ -14,10 +14,9 @@ cookbooks:
     - _frontend
     - _simple_gems
     - _public_module
-    - _admin_namespace
     - _readme
+    - _admin_namespace
     - _gemfile_cleanup
 
     optional:
-    - _draper
-    - _reform
+    - _admin_namespace
