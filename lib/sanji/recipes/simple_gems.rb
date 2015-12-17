@@ -5,9 +5,6 @@ class Sanji::Recipes::SimpleGems < Sanji::Recipe
 
     a.gem_group :development, :test do
       gem 'thin'
-    end
-
-    a.gem_group :development, :test do
       gem 'quiet_assets'
     end
   end
