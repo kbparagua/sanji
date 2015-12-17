@@ -64,11 +64,11 @@ class Sanji::Assistant
   end
 
   def log_start method_name
-    self.say "start ##{method_name}"
+    self.say "##{method_name} [start]"
   end
 
   def log_end method_name
-    self.say "end ##{method_name}"
+    self.say "##{method_name} [end]"
   end
 
   def say text
