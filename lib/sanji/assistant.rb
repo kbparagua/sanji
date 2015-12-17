@@ -72,25 +72,31 @@ class Sanji::Assistant
   end
 
   def say text
-    self.builder.say recipe_message(text), Thor::Shell::Color::YELLOW
+    self.builder.say recipe_message(text)
   end
 
   def ask question
-    self.builder.ask recipe_message(question)
+    self.builder.ask recipe_message(apply_question_style(question))
   end
 
   def yes? question
-    self.builder.yes? recipe_message("#{question} (y/n)")
+    self.builder.yes? recipe_message(apply_question_style("#{question} (y/n)"))
   end
 
   def no? question
-    self.builder.no? recipe_message("#{question} (y/n)")
+    self.builder.no? recipe_message(apply_question_style("#{question} (y/n)"))
   end
+
+
 
   private
 
+  def apply_question_style string = ''
+    "\e[30m\e[46m#{string}\e[0m"
+  end
+
   def recipe_message message = ''
-    "#{self.active_recipe.class.name} -> #{message}"
+    "\e[1m\e[33m#{self.active_recipe.class.name} -> \e[0m #{message}"
   end
 
 end
