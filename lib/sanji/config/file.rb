@@ -21,9 +21,8 @@ class Sanji::Config::File
     self.cookbooks.has_key? name.to_s
   end
 
-  def recipes
-    return [] unless self.contents
-    self.cookbooks[self.cookbook]
+  def recipes_for cookbook
+    self.cookbooks[cookbook]['recipes']
   end
 
   def recipes_path

@@ -45,20 +45,16 @@ class Sanji::Options
     return [] unless self.cookbook_entry.has_key?('optional')
 
     @optional_recipe_classes ||=
-      self.cookbook_entry['optional'].map do |recipe_name|
-        self.get_recipe_class recipe_name
+      self.cookbook_entry['optional'].flat_map do |value|
+        self.get_recipe_classes_from_value value
       end
   end
 
   def cookbook_entry
     return @cookbook_entry if @cookbook_entry
 
-    @cookbook_entry =
-      if self.cookbook.belongs_to_sanji?
-        @default_config.cookbooks[self.cookbook.key_name]
-      else
-        @user_config.cookbooks[self.cookbook.key_name]
-      end
+    config = self.cookbook.belongs_to_sanji? ? @default_config : @user_config
+    @cookbook_entry = config.cookbooks[self.cookbook.key_name]
   end
 
   def cookbook
@@ -66,6 +62,28 @@ class Sanji::Options
 
     cookbook_name = @user_config.cookbook || @default_config.cookbook
     @cookbook = Sanji::Config::Item.new cookbook_name
+  end
+
+  def get_recipe_classes_from_value value = ''
+    if Sanji::Config::CookbookReference.valid? value
+      cookbook_reference = Sanji::Config::CookbookReference.new value
+
+      self.recipe_names_for_cookbook(cookbook_reference.key_name).map do |name|
+        self.get_recipe_class name
+      end
+    else
+      self.get_recipe_class value
+    end
+  end
+
+  def recipe_names_for_cookbook name
+    if @user_config.has_cookbook? name
+      @user_config.recipes_for name
+    elsif @default_config.has_cookbook? name
+      @default_config.recipes_for name
+    else
+      raise 'Invalid cookbook.'
+    end
   end
 
   def get_recipe_class recipe_name
