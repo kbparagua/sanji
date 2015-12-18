@@ -1,4 +1,7 @@
 module Sanji
+  module Config
+  end
+
   module Recipes
   end
 

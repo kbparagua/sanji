@@ -1,6 +1,6 @@
 require 'yaml'
 
-class Sanji::Config
+class Sanji::Config::File
 
   attr_reader :contents
 

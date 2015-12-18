@@ -1,4 +1,4 @@
-class Sanji::Item
+class Sanji::Config::Item
 
   SANJI_ITEM_PREFIX = '_'
 

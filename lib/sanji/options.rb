@@ -13,7 +13,7 @@ class Sanji::Options
 
 
   def initialize
-    @default_config = Sanji::Config.new "#{DEFAULT_HOME_PATH}/#{CONFIG_FILENAME}"
+    @default_config = Sanji::Config::File.new "#{DEFAULT_HOME_PATH}/#{CONFIG_FILENAME}"
     @user_config = self.fetch_user_config
   end
 
@@ -65,11 +65,11 @@ class Sanji::Options
     return @cookbook if @cookbook
 
     cookbook_name = @user_config.cookbook || @default_config.cookbook
-    @cookbook = Sanji::Item.new cookbook_name
+    @cookbook = Sanji::Config::Item.new cookbook_name
   end
 
   def get_recipe_class recipe_name
-    recipe = Sanji::Item.new recipe_name
+    recipe = Sanji::Config::Item.new recipe_name
 
     if recipe.belongs_to_sanji?
       Sanji::Recipes.const_get recipe.class_name
@@ -82,7 +82,7 @@ class Sanji::Options
     filename =
       user_home_path ? "#{self.user_home_path}/#{CONFIG_FILENAME}" : nil
 
-    Sanji::Config.new filename
+    Sanji::Config::File.new filename
   end
 
   def user_home_path
