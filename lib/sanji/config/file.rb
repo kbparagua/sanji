@@ -14,7 +14,7 @@ class Sanji::Config::File
   end
 
   def cookbook
-    self.contents['cookbook'] if self.contents
+    self.contents['cookbook']
   end
 
   def has_cookbook? key_name
