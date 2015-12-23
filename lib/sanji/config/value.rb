@@ -31,7 +31,7 @@ class Sanji::Config::Value
   end
 
   def as_class_name
-    @class_name ||= self.key_name.camelize
+    @class_name ||= self.as_key.camelize
   end
 
 end

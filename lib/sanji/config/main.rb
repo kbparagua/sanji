@@ -15,21 +15,14 @@ class Sanji::Config::Main
     @user_config = self.get_user_config_file
   end
 
-  def user_home_path
+  def user_recipes_path
     path = "#{self.user_home_path}/#{@user_config.recipes_path}"
 
-    if File.directory?(path)
-      path
-    else
+    if @user_config.recipes_path.nil? || !::File.directory?(path)
       nil
+    else
+      path
     end
-  end
-
-  def cookbook
-    return @cookbook if @cookbook
-
-    name = @user_config.cookbook || @default_config.cookbook
-    @cookbook = Sanji::Config::Value.new name
   end
 
   def recipes
@@ -61,6 +54,13 @@ class Sanji::Config::Main
     end
   end
 
+  def cookbook
+    return @cookbook if @cookbook
+
+    name = @user_config.cookbook || @default_config.cookbook
+    @cookbook = Sanji::Config::Value.new name
+  end
+
   def config
     @config ||=
       if @user_config.has_cookbook?(self.cookbook.as_key)
@@ -71,13 +71,18 @@ class Sanji::Config::Main
   end
 
   def get_default_config_file
-    home_path = "#{File.dirname(__FILE__)}/../"
+    home_path = "#{File.dirname(__FILE__)}/../../"
     Sanji::Config::File.new "#{home_path}/#{CONFIG_FILENAME}"
   end
 
   def get_user_config_file
-    return nil if self.user_home_path.present?
-    Sanji::Config::File.new "#{self.user_home_path}/CONFIG_FILENAME"
+    filename = "#{self.user_home_path}/#{CONFIG_FILENAME}"
+
+    if self.user_home_path.nil? || !::File.file?(filename)
+      Sanji::Config::BlankFile.new
+    else
+      Sanji::Config::File.new filename
+    end
   end
 
   def user_home_path

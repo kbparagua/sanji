@@ -12,8 +12,11 @@ module Sanji
   end
 end
 
-require 'sanji/item'
-require 'sanji/config'
+# Require config files.
+Dir["#{File.dirname(__FILE__)}/sanji/config/*.rb"].each do |filename|
+  require filename.sub(/\.rb\z/, '')
+end
+
 require 'sanji/options'
 
 # Require all utilities
