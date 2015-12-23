@@ -14,7 +14,7 @@ class Sanji::Options
   end
 
   def optional? recipe_class
-    self.optional_recipe_classes.include? recipe_class.to_s
+    self.optional_recipe_classes.include? recipe_class.name.demodulize
   end
 
 
