@@ -1,22 +1,26 @@
-cookbook: _basic
+cookbook: _standard
 
 cookbooks:
   basic:
     recipes:
     - _postgresql
+    - _figaro
     - _seedbank
     - _annotate
-    - _figaro
     - _haml
+    - _frontend
+    - _readme
+    - _gemfile_cleanup
+
+  standard:
+    recipes:
+    - ^_basic
     - _draper
     - _reform
     - _paloma
-    - _frontend
     - _simple_gems
     - _public_module
-    - _readme
     - _admin_namespace
-    - _gemfile_cleanup
 
     optional:
     - _admin_namespace

@@ -1,7 +1,7 @@
 class Sanji::Config::Value
 
   SANJI_ITEM_PREFIX = '_'
-  COOKBOOK_REFERENCE_PREFIX = '@'
+  COOKBOOK_REFERENCE_PREFIX = '^'
 
 
   attr_reader :value
