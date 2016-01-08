@@ -11,8 +11,16 @@ class Sanji::Config::Main
 
 
   def initialize
-    @default_config = self.get_default_config_file
-    @user_config = self.get_user_config_file
+    default_config = self.get_default_config_file
+    user_config = self.get_user_config_file
+
+    @config =
+      if user_config.present?
+        user_config.set_defaults_file default_config
+        user_config
+      else
+        default_config
+      end
   end
 
   def user_recipes_path
@@ -40,13 +48,8 @@ class Sanji::Config::Main
   def preferred_cookbook
     return @preferred_cookbook if @preferred_cookbook
 
-    name = @user_config.preferred_cookbook || @default_config.preferred_cookbook
-    key_name = Sanji::Config::Value.new(name).as_key
-
-    source =
-      @user_config.has_cookbook?(key_name) ? @user_config : @default_config
-
-    @preferred_cookbook = source.cookbook key_name
+    key_name = Sanji::Config::Value.new(@config.preferred_cookbook).as_key
+    @preferred_cookbook = @config.cookbook key_name
   end
 
   def get_default_config_file
@@ -58,7 +61,7 @@ class Sanji::Config::Main
     filename = "#{self.user_home_path}/#{CONFIG_FILENAME}"
 
     if self.user_home_path.nil? || !::File.file?(filename)
-      Sanji::Config::BlankFile.new
+      nil
     else
       Sanji::Config::File.new filename
     end

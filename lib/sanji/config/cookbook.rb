@@ -5,4 +5,8 @@ class Sanji::Config::Cookbook
     @contents = contents
   end
 
+  def recipes
+
+  end
+
 end
