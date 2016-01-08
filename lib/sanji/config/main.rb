@@ -1,7 +1,7 @@
 class Sanji::Config::Main
 
   CONFIG_FILENAME = 'sanji.yml'
-  COOKBOOK_REFERENCE_PREFIX = '@'
+  # COOKBOOK_REFERENCE_PREFIX = '@'
 
 
   def self.instance
@@ -26,48 +26,27 @@ class Sanji::Config::Main
   end
 
   def recipes
-    @recipes ||= self.recipes_for self.cookbook
+    @recipes ||= self.preferred_cookbook.recipes
   end
 
   def optional_recipes
-    @optional_recipes ||=
-      self.config.optional_recipes_for(self.cookbook.as_key).map do |recipe|
-        Sanji::Config::Value.new recipe
-      end
+    @optional_recipes ||= self.preferred_cookbook.optional_recipes
   end
 
 
 
   protected
 
-  def recipes_for cookbook_value_object = ''
-    recipes_entry = self.config.recipes_for cookbook_value_object.as_key
+  def preferred_cookbook
+    return @preferred_cookbook if @preferred_cookbook
 
-    recipes_entry.flat_map do |value|
-      value_object = Sanji::Config::Value.new value
+    name = @user_config.preferred_cookbook || @default_config.preferred_cookbook
+    key_name = Sanji::Config::Value.new(name).as_key
 
-      if value_object.references_cookbook?
-        self.recipes_for value_object
-      else
-        value_object
-      end
-    end
-  end
+    source =
+      @user_config.has_cookbook?(key_name) ? @user_config : @default_config
 
-  def cookbook
-    return @cookbook if @cookbook
-
-    name = @user_config.cookbook || @default_config.cookbook
-    @cookbook = Sanji::Config::Value.new name
-  end
-
-  def config
-    @config ||=
-      if @user_config.has_cookbook?(self.cookbook.as_key)
-        @user_config
-      else
-        @default_config
-      end
+    @preferred_cookbook = source.cookbook key_name
   end
 
   def get_default_config_file

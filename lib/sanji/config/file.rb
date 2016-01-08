@@ -11,36 +11,35 @@ class Sanji::Config::File
       else
         raise "Missing config file: #{filename}"
       end
+
+    @cookbooks = @contents['cookbooks']
+    @cookbook_instances = {}
   end
 
-  def cookbook
-    self.contents['cookbook']
-  end
 
-  def has_cookbook? key_name
-    self.cookbooks.has_key? key_name.to_s
-  end
 
-  def recipes_for cookbook_key_name
-    raise 'Invalid cookbook.' unless self.has_cookbook? cookbook_key_name
-    self.cookbooks[cookbook_key_name]['recipes']
-  end
-
-  def optional_recipes_for cookbook_key_name
-    self.cookbooks[cookbook_key_name]['optional']
+  def preferred_cookbook
+    @contents['cookbook']
   end
 
   def recipes_path
-    self.contents['recipes']
+    @contents['recipes']
   end
 
+  def cookbook key_name
+    raise "Invalid cookbook: #{key_name}." unless self.has_cookbook? key_name
 
+    name = key_name.to_s
+    return @cookbook_instances[name] if @cookbook_instances[name]
 
-  protected
+    instance = Sanji::Config::Cookbook.new name, @cookbooks[name]
+    @cookbook_instances[name] = instance
 
-  def cookbooks
-    self.contents['cookbooks']
+    instance
   end
 
+  def has_cookbook? key_name
+    @cookbooks.has_key? key_name.to_s
+  end
 
 end
