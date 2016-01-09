@@ -2,6 +2,9 @@ require 'yaml'
 
 class Sanji::Config::File
 
+  SANJI_COOKBOOK_PREFIX = '_'
+
+
   attr_reader :contents
 
   def initialize filename
@@ -14,7 +17,7 @@ class Sanji::Config::File
 
     @defaults = nil
     @cookbooks = @contents['cookbooks']
-    @cookbook_instances = {}
+    @cookbook_entries = {}
   end
 
 
@@ -30,20 +33,24 @@ class Sanji::Config::File
     @contents['recipes'] || @defaults.try(:recipes_path)
   end
 
-  def cookbook key_name
+  def cookbook_by_name name
+    self.cookbook_by_key name.sub(SANJI_COOKBOOK_PREFIX, '')
+  end
+
+  def cookbook_by_key key_name
     name = key_name.to_s
-    return @cookbook_instances[name] if @cookbook_instances[name]
+    return @cookbook_entries[name] if @cookbook_entries[name]
 
     instance =
       if self.has_cookbook? name
-        Sanji::Config::Cookbook.new name, @cookbooks[name]
+        @cookbooks[name]
       elsif @defaults.present? && @defaults.has_cookbook?(name)
         @defaults.cookbook name
       else
         raise "Invalid cookbook: #{name}"
       end
 
-    @cookbook_instances[name] = instance
+    @cookbook_entries[name] = instance
   end
 
   def has_cookbook? key_name

@@ -48,8 +48,8 @@ class Sanji::Config::Main
   def preferred_cookbook
     return @preferred_cookbook if @preferred_cookbook
 
-    key_name = Sanji::Config::Value.new(@config.preferred_cookbook).as_key
-    @preferred_cookbook = @config.cookbook key_name
+    cookbook_builder = Sanji::Config::CookbookBuilder.new @config
+    @preferred_cookbook = cookbook_builder.build @config.preferred_cookbook
   end
 
   def get_default_config_file
