@@ -38,19 +38,19 @@ class Sanji::Config::File
   end
 
   def cookbook_by_key key_name
-    name = key_name.to_s
-    return @cookbook_entries[name] if @cookbook_entries[name]
+    key = key_name.to_s
+    return @cookbook_entries[key] if @cookbook_entries[key]
 
     instance =
-      if self.has_cookbook? name
-        @cookbooks[name]
-      elsif @defaults.present? && @defaults.has_cookbook?(name)
-        @defaults.cookbook name
+      if self.has_cookbook? key
+        @cookbooks[key]
+      elsif @defaults.present? && @defaults.has_cookbook?(key)
+        @defaults.cookbook key
       else
-        raise "Invalid cookbook: #{name}"
+        raise "Invalid cookbook: #{key}"
       end
 
-    @cookbook_entries[name] = instance
+    @cookbook_entries[key] = instance
   end
 
   def has_cookbook? key_name
