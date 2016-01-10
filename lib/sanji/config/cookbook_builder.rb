@@ -12,7 +12,7 @@ class Sanji::Config::CookbookBuilder
 
     entry['include'].each do |cookbook_name|
       other_cookbook = self.class.new(@config).build cookbook_name
-      cookbook.included_cookbook other_cookbook
+      cookbook.include_cookbook other_cookbook
     end
 
     cookbook

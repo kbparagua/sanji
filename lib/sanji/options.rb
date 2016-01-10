@@ -8,7 +8,9 @@ class Sanji::Options
 
   def recipe_classes
     @recipe_classes ||=
-      Sanji::Config::Main.instance.recipes.map &:full_class_name
+      Sanji::Config::Main.instance.recipes.map do |recipe|
+        recipe.full_class_name.constantize
+      end
   end
 
   def optional? recipe_class
@@ -21,7 +23,7 @@ class Sanji::Options
 
   def optional_recipe_classes
     @optional_recipe_classes ||=
-      Sanji::Config::Main.instance.optional_recipes.map(&:as_class_name)
+      Sanji::Config::Main.instance.optional_recipes.map(&:class_name)
   end
 
 end

@@ -24,9 +24,9 @@ class Sanji::Config::Main
   end
 
   def user_recipes_path
-    path = "#{self.user_home_path}/#{@user_config.recipes_path}"
+    path = "#{self.user_home_path}/#{@config.recipes_path}"
 
-    if @user_config.recipes_path.nil? || !::File.directory?(path)
+    if @config.recipes_path.nil? || !::File.directory?(path)
       nil
     else
       path

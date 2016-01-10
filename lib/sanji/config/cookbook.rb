@@ -22,6 +22,19 @@ class Sanji::Config::Cookbook
       end
   end
 
+  def optional_recipes
+    return @optional_recipes if @optional_recipes
+
+    optional = @contents['optional'] || []
+    optional.map! { |name| Sanji::Config::Recipe.new name }
+
+    @included_cookbooks.each do |_, cookbook|
+      optional += cookbook.optional_recipes
+    end
+
+    @optional_recipes = optional
+  end
+
 
 
   protected
