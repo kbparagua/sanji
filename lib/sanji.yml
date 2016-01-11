@@ -13,6 +13,9 @@ cookbooks:
     - _gemfile_cleanup
 
   standard:
+    include:
+    - _basic
+
     recipes:
     - ^_basic
     - _draper

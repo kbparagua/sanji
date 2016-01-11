@@ -2,6 +2,9 @@ require 'yaml'
 
 class Sanji::Config::File
 
+  SANJI_COOKBOOK_PREFIX = '_'
+
+
   attr_reader :contents
 
   def initialize filename
@@ -11,36 +14,47 @@ class Sanji::Config::File
       else
         raise "Missing config file: #{filename}"
       end
+
+    @defaults = nil
+    @cookbooks = @contents['cookbooks']
+    @cookbook_entries = {}
   end
 
-  def cookbook
-    self.contents['cookbook']
+
+  def set_defaults_file defaults
+    @defaults = defaults
   end
 
-  def has_cookbook? key_name
-    self.cookbooks.has_key? key_name.to_s
-  end
-
-  def recipes_for cookbook_key_name
-    raise 'Invalid cookbook.' unless self.has_cookbook? cookbook_key_name
-    self.cookbooks[cookbook_key_name]['recipes']
-  end
-
-  def optional_recipes_for cookbook_key_name
-    self.cookbooks[cookbook_key_name]['optional']
+  def preferred_cookbook
+    @contents['cookbook'] || @defaults.try(:preferred_cookbook)
   end
 
   def recipes_path
-    self.contents['recipes']
+    @contents['recipes'] || @defaults.try(:recipes_path)
   end
 
-
-
-  protected
-
-  def cookbooks
-    self.contents['cookbooks']
+  def cookbook_by_name name
+    self.cookbook_by_key name.sub(SANJI_COOKBOOK_PREFIX, '')
   end
 
+  def cookbook_by_key key_name
+    key = key_name.to_s
+    return @cookbook_entries[key] if @cookbook_entries[key]
+
+    instance =
+      if self.has_cookbook? key
+        @cookbooks[key]
+      elsif @defaults.present? && @defaults.has_cookbook?(key)
+        @defaults.cookbook key
+      else
+        raise "Invalid cookbook: #{key}"
+      end
+
+    @cookbook_entries[key] = instance
+  end
+
+  def has_cookbook? key_name
+    @cookbooks.has_key? key_name.to_s
+  end
 
 end

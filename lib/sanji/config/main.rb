@@ -1,7 +1,7 @@
 class Sanji::Config::Main
 
   CONFIG_FILENAME = 'sanji.yml'
-  COOKBOOK_REFERENCE_PREFIX = '@'
+  # COOKBOOK_REFERENCE_PREFIX = '@'
 
 
   def self.instance
@@ -11,14 +11,22 @@ class Sanji::Config::Main
 
 
   def initialize
-    @default_config = self.get_default_config_file
-    @user_config = self.get_user_config_file
+    default_config = self.get_default_config_file
+    user_config = self.get_user_config_file
+
+    @config =
+      if user_config.present?
+        user_config.set_defaults_file default_config
+        user_config
+      else
+        default_config
+      end
   end
 
   def user_recipes_path
-    path = "#{self.user_home_path}/#{@user_config.recipes_path}"
+    path = "#{self.user_home_path}/#{@config.recipes_path}"
 
-    if @user_config.recipes_path.nil? || !::File.directory?(path)
+    if @config.recipes_path.nil? || !::File.directory?(path)
       nil
     else
       path
@@ -26,48 +34,22 @@ class Sanji::Config::Main
   end
 
   def recipes
-    @recipes ||= self.recipes_for self.cookbook
+    @recipes ||= self.preferred_cookbook.recipes
   end
 
   def optional_recipes
-    @optional_recipes ||=
-      self.config.optional_recipes_for(self.cookbook.as_key).map do |recipe|
-        Sanji::Config::Value.new recipe
-      end
+    @optional_recipes ||= self.preferred_cookbook.optional_recipes
   end
 
 
 
   protected
 
-  def recipes_for cookbook_value_object = ''
-    recipes_entry = self.config.recipes_for cookbook_value_object.as_key
+  def preferred_cookbook
+    return @preferred_cookbook if @preferred_cookbook
 
-    recipes_entry.flat_map do |value|
-      value_object = Sanji::Config::Value.new value
-
-      if value_object.references_cookbook?
-        self.recipes_for value_object
-      else
-        value_object
-      end
-    end
-  end
-
-  def cookbook
-    return @cookbook if @cookbook
-
-    name = @user_config.cookbook || @default_config.cookbook
-    @cookbook = Sanji::Config::Value.new name
-  end
-
-  def config
-    @config ||=
-      if @user_config.has_cookbook?(self.cookbook.as_key)
-        @user_config
-      else
-        @default_config
-      end
+    cookbook_builder = Sanji::Config::CookbookBuilder.new @config
+    @preferred_cookbook = cookbook_builder.build @config.preferred_cookbook
   end
 
   def get_default_config_file
@@ -79,7 +61,7 @@ class Sanji::Config::Main
     filename = "#{self.user_home_path}/#{CONFIG_FILENAME}"
 
     if self.user_home_path.nil? || !::File.file?(filename)
-      Sanji::Config::BlankFile.new
+      nil
     else
       Sanji::Config::File.new filename
     end
