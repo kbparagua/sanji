@@ -27,3 +27,13 @@ cookbooks:
 
     optional:
     - _admin_namespace
+
+    gems:
+      all:
+      - paperclip
+      - kaminari
+
+      "development,test":
+      - thin
+      - quiet_assets
+
