@@ -35,8 +35,8 @@ class Sanji::Config::Cookbook
     @optional_recipes = optional
   end
 
-  def gems
-    return @gems if @gems
+  def gem_groups
+    return @gem_groups if @gem_groups
 
     gems_by_env = @contents['gems'] || {}
 
@@ -47,7 +47,7 @@ class Sanji::Config::Cookbook
       end
     end
 
-    @gems = gems_by_env
+    @gem_groups = gems_by_env
   end
 
 

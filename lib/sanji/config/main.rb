@@ -41,8 +41,15 @@ class Sanji::Config::Main
     @optional_recipes ||= self.preferred_cookbook.optional_recipes
   end
 
-  def gems
+  def gem_groups
+    @gem_groups = {}
 
+    self.preferred_cookbook.gem_groups.each do |env, gems|
+      group = env == 'all' ? nil : env.split(',')
+      @gem_groups[group] = gems
+    end
+
+    @gem_groups
   end
 
 
