@@ -41,6 +41,10 @@ class Sanji::Config::Main
     @optional_recipes ||= self.preferred_cookbook.optional_recipes
   end
 
+  def gems
+
+  end
+
 
 
   protected
