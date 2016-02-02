@@ -3,6 +3,7 @@ cookbook: _standard
 cookbooks:
   basic:
     recipes:
+    - _gemfile
     - _postgresql
     - _figaro
     - _seedbank
@@ -30,10 +31,14 @@ cookbooks:
 
     gems:
       all:
+      - thin
       - paperclip
       - kaminari
 
-      "development,test":
+      development:
       - thin
       - quiet_assets
 
+      test:
+      - thin
+      - quiet_assets

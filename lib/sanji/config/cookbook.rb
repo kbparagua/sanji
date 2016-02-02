@@ -40,7 +40,7 @@ class Sanji::Config::Cookbook
 
     gems_by_env = self.own_gem_groups
 
-    @included_cookbooks.each do |cookbook|
+    @included_cookbooks.each do |_, cookbook|
       cookbook.gem_groups.each do |env, gems|
         gems_by_env[env] ||= []
         gems_by_env[env] += gems
@@ -55,20 +55,7 @@ class Sanji::Config::Cookbook
   protected
 
   def own_gem_groups
-    gems_by_env = {}
-    gems = @contents['gems'] || {}
-
-    gems.each do |env, list|
-      gems_by_env[env] = self.to_gem_objects(list)
-    end
-
-    gems_by_env
-  end
-
-  def to_gem_objects gems = []
-    gems.map do |name|
-      Sanji::Config::Gem.new name
-    end
+    @contents['gems'] || {}
   end
 
   def create_recipe recipe_or_reference
