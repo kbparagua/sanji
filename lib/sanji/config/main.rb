@@ -41,8 +41,8 @@ class Sanji::Config::Main
     @optional_recipes ||= self.preferred_cookbook.optional_recipes
   end
 
-  def gem_groups
-    @gem_groups ||= self.preferred_cookbook.gem_groups
+  def gems_by_env
+    @gem_groups ||= self.preferred_cookbook.gems_by_env
   end
 
 

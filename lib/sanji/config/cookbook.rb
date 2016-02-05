@@ -35,26 +35,26 @@ class Sanji::Config::Cookbook
     @optional_recipes = optional
   end
 
-  def gem_groups
-    return @gem_groups if @gem_groups
+  def gems_by_env
+    return @gems_by_env if @gems_by_env
 
-    gems_by_env = self.own_gem_groups
+    @gems_by_env = self.own_gems_by_env
 
     @included_cookbooks.each do |_, cookbook|
-      cookbook.gem_groups.each do |env, gems|
-        gems_by_env[env] ||= []
-        gems_by_env[env] += gems
+      cookbook.gems_by_env.each do |env, gems|
+        @gems_by_env[env] ||= []
+        @gems_by_env[env] += gems
       end
     end
 
-    @gem_groups = gems_by_env
+    @gems_by_env
   end
 
 
 
   protected
 
-  def own_gem_groups
+  def own_gems_by_env
     @contents['gems'] || {}
   end
 
