@@ -1,13 +1,27 @@
 class Sanji::Recipes::Gemfile < Sanji::Recipe
 
   def after_create
-    self.gem_groups.each do |envs, gems|
+    raise self.gem_groups.inspect
 
+    self.gem_groups.each do |envs, gems|
+      group = self.to_group_name envs
+
+      a.say "Group: #{group}\n"
+
+      gems.each do |g|
+        a.say g
+      end
     end
+
   end
 
 
   protected
+
+  def to_group_name envs = []
+    return nil if envs.include? 'all'
+    envs.map { |env| ":#{env}" }.join ', '
+  end
 
   def gem_groups
     return @gem_groups if @gem_groups
@@ -31,7 +45,10 @@ class Sanji::Recipes::Gemfile < Sanji::Recipe
 
     @gem_groups_data = {}
 
-    self.envs_by_gem..each do |gem_name, envs|
+    self.envs_by_gem.each do |gem_name, envs|
+      # Ignore other environment if all/global is included.
+      envs = ['all'] if envs.include? 'all'
+
       sorted_envs = envs.sort
       group_id = sorted_envs.join '-'
 
