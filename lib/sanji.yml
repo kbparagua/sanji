@@ -31,7 +31,6 @@ cookbooks:
 
     gems:
       global:
-      - thin
       - paperclip
       - kaminari
 
