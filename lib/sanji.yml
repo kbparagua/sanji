@@ -30,15 +30,11 @@ cookbooks:
     - _admin_namespace
 
     gems:
-      all:
+      global:
       - thin
       - paperclip
       - kaminari
 
-      development:
-      - thin
-      - quiet_assets
-
-      test:
+      "development,test":
       - thin
       - quiet_assets
