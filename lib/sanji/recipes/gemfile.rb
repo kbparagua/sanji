@@ -1,27 +1,53 @@
 class Sanji::Recipes::Gemfile < Sanji::Recipe
 
   GLOBAL_SCOPE = 'global'
+  GLOBAL_GEM_PATTERN = /^gem (.)+\n/
 
   def after_create
     self.gem_groups.each do |group, gems|
-      group_block = ''
+      gem_list = gems.map { |name| "\tgem '#{name}'\n" }
 
-      if self.global_group? group
-        gems.each { |name| group_block << "gem '#{name}'\n" }
+      if self.global? group
+        # Remove tab character from gems.
+        self.insert_gems gem_list.map(&:lstrip)
       else
-        group_block << self.group_header(group)
-        gems.each { |name| group_block << "\tgem '#{name}'\n" }
-        group_block << "end\n"
+        self.insert_group group, gem_list
       end
-
-      a.append_to_file 'Gemfile', group_block
     end
+
+    # Clear file contents
+    a.gsub_file 'Gemfile', /(\s|\S)*/, ''
+    a.append_to_file 'Gemfile', self.gemfile
   end
 
 
   protected
 
-  def global_group? group = []
+  def insert_gems gem_list = []
+    first_global_gem = self.gemfile[/^gem (.)+\n/]
+
+    insert_at_index =
+      self.gemfile.index(first_global_gem) +
+      first_global_gem.length
+
+    self.gemfile.insert insert_at_index, gem_list.join
+  end
+
+  def insert_group group, gem_list = []
+    header = self.group_header group
+    header_index = self.gemfile.index header
+
+    if header_index.present?
+      insert_at_index = header_index + header.length
+      self.gemfile.insert insert_at_index, gem_list.join
+    else
+      self.gemfile << header
+      self.gemfile << gem_list.join
+      self.gemfile << "end\n"
+    end
+  end
+
+  def global? group = []
     group.include? GLOBAL_SCOPE
   end
 
@@ -40,6 +66,18 @@ class Sanji::Recipes::Gemfile < Sanji::Recipe
   # }
   def gem_groups
     @gem_groups ||= Sanji::Config::Main.instance.gem_groups
+  end
+
+  def already_on_gemfile? group_header = ''
+    self.gemfile.include? grou
+    a.get 'Gemfile' do |contents|
+      index = contents.index group_header
+      return false if index.nil?
+    end
+  end
+
+  def gemfile
+    @gemfile ||= File.read("#{a.destination_root}/Gemfile")
   end
 
 end

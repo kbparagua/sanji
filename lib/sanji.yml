@@ -37,3 +37,6 @@ cookbooks:
       "development,test":
       - thin
       - quiet_assets
+
+      "development,staging,production":
+      - devise
