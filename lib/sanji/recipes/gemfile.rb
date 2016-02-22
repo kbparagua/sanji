@@ -68,14 +68,6 @@ class Sanji::Recipes::Gemfile < Sanji::Recipe
     @gem_groups ||= Sanji::Config::Main.instance.gem_groups
   end
 
-  def already_on_gemfile? group_header = ''
-    self.gemfile.include? grou
-    a.get 'Gemfile' do |contents|
-      index = contents.index group_header
-      return false if index.nil?
-    end
-  end
-
   def gemfile
     @gemfile ||= File.read("#{a.destination_root}/Gemfile")
   end
