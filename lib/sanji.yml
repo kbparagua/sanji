@@ -31,7 +31,7 @@ cookbooks:
 
     gems:
       global:
-      - paperclip
+      - 'paperclip, ~> 4.3'
       - kaminari
 
       development test:

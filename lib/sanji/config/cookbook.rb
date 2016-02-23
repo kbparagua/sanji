@@ -59,10 +59,10 @@ class Sanji::Config::Cookbook
 
     gem_groups = {}
 
-    gems_by_group_name.each do |group_name, gems|
+    gems_by_group_name.each do |group_name, gem_full_names|
       group = group_name.split(' ').map &:strip
       gem_groups[group] ||= []
-      gem_groups[group] += gems
+      gem_groups[group] += gem_full_names.map { |fn| Sanji::Config::Gem.new fn }
     end
 
     gem_groups

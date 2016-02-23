@@ -5,7 +5,7 @@ class Sanji::Recipes::Gemfile < Sanji::Recipe
 
   def after_create
     self.gem_groups.each do |group, gems|
-      gem_list = gems.map { |name| "\tgem '#{name}'\n" }
+      gem_list = gems.map { |gem_object| "\t#{gem_object.as_gemfile_entry}" }
 
       if self.global? group
         # Remove tab character from gems.
