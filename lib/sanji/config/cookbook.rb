@@ -60,7 +60,7 @@ class Sanji::Config::Cookbook
     gem_groups = {}
 
     gems_by_group_name.each do |group_name, gems|
-      group = group_name.split(',').map &:strip
+      group = group_name.split(' ').map &:strip
       gem_groups[group] ||= []
       gem_groups[group] += gems
     end

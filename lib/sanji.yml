@@ -34,9 +34,9 @@ cookbooks:
       - paperclip
       - kaminari
 
-      "development,test":
+      development test:
       - thin
       - quiet_assets
 
-      "development,staging,production":
+      development staging production:
       - devise
