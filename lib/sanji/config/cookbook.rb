@@ -35,9 +35,38 @@ class Sanji::Config::Cookbook
     @optional_recipes = optional
   end
 
+  def gem_groups
+    return @gem_groups if @gem_groups
+
+    @gem_groups = self.own_gem_groups
+
+    @included_cookbooks.each do |_, cookbook|
+      cookbook.gem_groups.each do |group, gems|
+        @gem_groups[group] ||= []
+        @gem_groups[group] += gems
+      end
+    end
+
+    @gem_groups
+  end
+
 
 
   protected
+
+  def own_gem_groups
+    gems_by_group_name = @contents['gems'] || {}
+
+    gem_groups = {}
+
+    gems_by_group_name.each do |group_name, gem_full_names|
+      group = group_name.split(' ').map &:strip
+      gem_groups[group] ||= []
+      gem_groups[group] += gem_full_names.map { |fn| Sanji::Config::Gem.new fn }
+    end
+
+    gem_groups
+  end
 
   def create_recipe recipe_or_reference
     if recipe_or_reference.start_with? COOKBOOK_REFERENCE_PREFIX

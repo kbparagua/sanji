@@ -3,6 +3,7 @@ cookbook: _standard
 cookbooks:
   basic:
     recipes:
+    - _gemfile
     - _postgresql
     - _figaro
     - _seedbank
@@ -27,3 +28,15 @@ cookbooks:
 
     optional:
     - _admin_namespace
+
+    gems:
+      global:
+      - 'paperclip, ~> 4.3'
+      - kaminari
+
+      development test:
+      - thin
+      - quiet_assets
+
+      development staging production:
+      - devise
