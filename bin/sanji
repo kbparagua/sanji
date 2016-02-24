@@ -5,10 +5,25 @@ require 'sanji'
 templates_root =
   File.expand_path(File.join('..', 'templates'), File.dirname(__FILE__))
 
-Sanji::AppGenerator.source_root templates_root
+# Related links about source_root and source_paths:
+# - http://www.rubydoc.info/github/wycats/thor/Thor/Actions#find_in_source_paths-instance_method
+# - https://github.com/erikhuda/thor/blob/master/lib/thor/actions.rb
+# - http://apidock.com/rails/v4.2.1/Rails/Generators/Base/source_root/class
 
-Sanji::AppGenerator.source_paths <<
-  Rails::Generators::AppGenerator.source_root <<
-  templates_root
+Sanji::AppGenerator.source_root templates_root
+Sanji::AppGenerator.source_paths << Rails::Generators::AppGenerator.source_root
+
+if Sanji::Config::Main.instance.user_templates_path.present?
+
+  Sanji::AppGenerator.source_root(
+    Sanji::Config::Main.instance.user_templates_path
+  )
+
+  # Add user's templates path first before sanji's own templates path,
+  # so that user's templates can override sanji's templates.
+  Sanji::AppGenerator.source_paths <<
+    Sanji::Config::Main.instance.user_templates_path <<
+    templates_root
+end
 
 Sanji::AppGenerator.start
