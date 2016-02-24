@@ -23,6 +23,11 @@ class Sanji::Config::Main
       end
   end
 
+  def user_templates_path
+    path = "#{self.user_home_path}/templates"
+    ::File.directory?(path) ? path : nil
+  end
+
   def user_recipes_path
     path = "#{self.user_home_path}/#{@config.recipes_path}"
 
