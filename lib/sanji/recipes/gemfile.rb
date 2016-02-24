@@ -12,7 +12,7 @@ class Sanji::Recipes::Gemfile < Sanji::Recipe
       end
     end
 
-    a.replace_file_content 'Gemfile', self.gemfile
+    a.replace_file_contents 'Gemfile', self.gemfile
   end
 
 

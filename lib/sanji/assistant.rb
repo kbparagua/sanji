@@ -60,16 +60,15 @@ class Sanji::Assistant
   end
 
   def erase_file_contents path
-    File.open(self.full_path(path), 'w'){}
+    File.open(self.destination_path(path), 'w'){}
   end
 
-  def replace_file_content path, new_content
+  def replace_file_contents path, new_content
     self.erase_file_contents path
     self.builder.append_to_file path, new_content
   end
 
-  # Returns complete path of a file in the destination root.
-  def full_path path = ''
+  def destination_path path = ''
     [self.builder.destination_root, path].join '/'
   end
 

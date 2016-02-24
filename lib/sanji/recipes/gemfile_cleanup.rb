@@ -1,14 +1,10 @@
 class Sanji::Recipes::GemfileCleanup < Sanji::Recipe
 
   def after_everything
-    @gemfile = File.read self.gemfile_path
-    @new_gemfile = ''
-
     @group_lines = {:global => []}
     @active_group = :global
 
-    @gemfile.each_line { |line| self.group_line line }
-
+    self.gemfile.each_line { |line| self.group_line line }
     self.rewrite_gemfile
   end
 
@@ -16,13 +12,8 @@ class Sanji::Recipes::GemfileCleanup < Sanji::Recipe
 
   protected
 
-  def gemfile_path
-    @gemfile_path ||= "#{a.destination_root}/Gemfile"
-  end
-
   def group_line line = ''
-    # Ignore comments and empty lines
-    return if line =~ /^\s*#/ || line =~ /^\s*$\n/
+    return if self.is_blank_or_comment? line
 
     group_full_name = self.extract_group_full_name line
 
@@ -36,6 +27,11 @@ class Sanji::Recipes::GemfileCleanup < Sanji::Recipe
     end
   end
 
+  def is_blank_or_comment? line = ''
+    line =~ /^\s*#/ || line =~ /^\s*$\n/
+  end
+
+  # return example: ":development, :test"
   def extract_group_full_name line = ''
     if line =~ /^group.+do$\n/
       groups = line.scan(/:\w+/).sort
@@ -48,28 +44,28 @@ class Sanji::Recipes::GemfileCleanup < Sanji::Recipe
   end
 
   def rewrite_gemfile
-    self.erase_gemfile_contents
-
     global_statements = @group_lines.delete :global
-    global_statements.each { |line| @new_gemfile << line }
+    global_statements.each { |line| self.new_gemfile << line }
 
     @group_lines.each do |group, lines|
       self.append_group_to_new_gemfile group, lines
     end
 
-    a.append_to_file 'Gemfile', @new_gemfile
-  end
-
-  def erase_gemfile_contents
-    File.open(self.gemfile_path, 'w'){}
+    a.replace_file_contents 'Gemfile', self.new_gemfile
   end
 
   def append_group_to_new_gemfile group, lines
-    @new_gemfile << "\ngroup #{group} do\n"
+    self.new_gemfile << "\ngroup #{group} do\n"
+    lines.each { |line| self.new_gemfile << line }
+    self.new_gemfile << "end\n"
+  end
 
-    lines.each { |line| @new_gemfile << line }
+  def new_gemfile
+    @new_gemfile ||= ''
+  end
 
-    @new_gemfile << "end\n"
+  def gemfile
+    @gemfile ||= File.read a.destination_path('Gemfile')
   end
 
 end
