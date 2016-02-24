@@ -5,8 +5,6 @@ module Sanji
   class AppGenerator < Rails::Generators::AppGenerator
 
     def finish_template
-      puts "source_paths = #{self.source_paths}"
-
       invoke :sanji_after_create_tasks
       super
     end
