@@ -59,6 +59,20 @@ class Sanji::Assistant
       Regexp.new("^\\s*gem ('|\")#{name}('|\").*\\n"), ''
   end
 
+  def erase_file_contents path
+    File.open(self.full_path(path), 'w'){}
+  end
+
+  def replace_file_content path, new_content
+    self.erase_file_contents path
+    self.builder.append_to_file path, new_content
+  end
+
+  # Returns complete path of a file in the destination root.
+  def full_path path = ''
+    [self.builder.destination_root, path].join '/'
+  end
+
   def delete_file filename
     self.builder.run "rm #{filename}"
   end

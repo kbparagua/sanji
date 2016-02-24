@@ -4,12 +4,12 @@ cookbooks:
   basic:
     recipes:
     - _postgresql
+    - _gemfile
     - _figaro
     - _seedbank
     - _annotate
     - _haml
     - _frontend
-    - _gemfile
     - _gemfile_cleanup
     - _readme
 

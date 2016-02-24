@@ -1,50 +1,34 @@
 class Sanji::Recipes::Gemfile < Sanji::Recipe
 
   GLOBAL_SCOPE = 'global'
-  GLOBAL_GEM_PATTERN = /^gem (.)+\n/
+
 
   def after_create
     self.gem_groups.each do |group, gems|
-      gem_list = gems.map { |gem_object| "\t#{gem_object.as_gemfile_entry}" }
-
       if self.global? group
-        # Remove tab character from gems.
-        self.insert_gems gem_list.map(&:lstrip)
+        self.insert_gems gems
       else
-        self.insert_group group, gem_list
+        self.insert_group group, gems
       end
     end
 
-    # Clear file contents
-    a.gsub_file 'Gemfile', /(\s|\S)*/, ''
-    a.append_to_file 'Gemfile', self.gemfile
+    a.replace_file_content 'Gemfile', self.gemfile
   end
 
 
   protected
 
-  def insert_gems gem_list = []
-    first_global_gem = self.gemfile[/^gem (.)+\n/]
-
-    insert_at_index =
-      self.gemfile.index(first_global_gem) +
-      first_global_gem.length
-
-    self.gemfile.insert insert_at_index, gem_list.join
+  def insert_gems gems
+    gem_list = gems.map(&:as_gemfile_entry).join
+    self.gemfile << "\n#{gem_list}"
   end
 
-  def insert_group group, gem_list = []
-    header = self.group_header group
-    header_index = self.gemfile.index header
+  def insert_group group, gems = []
+    gem_list = gems.map { |g| "\t#{g.as_gemfile_entry}" }.join
 
-    if header_index.present?
-      insert_at_index = header_index + header.length
-      self.gemfile.insert insert_at_index, gem_list.join
-    else
-      self.gemfile << header
-      self.gemfile << gem_list.join
-      self.gemfile << "end\n"
-    end
+    self.gemfile << self.group_header(group)
+    self.gemfile << gem_list
+    self.gemfile << "end\n"
   end
 
   def global? group = []
