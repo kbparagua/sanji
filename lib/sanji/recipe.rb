@@ -18,52 +18,28 @@ class Sanji::Recipe
   end
 
   def run_after_create
+    # Need to set this because we need to display recipe name
+    # when asking user to confirm.
     a.active_recipe = self
 
     @disabled = !self.confirm? if self.optional?
+
     if @disabled
       a.active_recipe = nil
       return
     end
 
-    a.log_start :after_create
-    self.after_create
-    a.log_end :after_create
-
-    a.active_recipe = nil
+    self.run :after_create
   end
 
   def run_after_bundle
     return if @disabled
-
-    a.active_recipe = self
-
-    a.log_start :after_bundle
-    self.after_bundle
-    a.log_end :after_bundle
-
-    a.active_recipe = nil
+    self.run :after_bundle
   end
 
   def run_after_everything
     return if @disabled
-
-    a.active_recipe = self
-
-    a.log_start :after_everything
-    self.after_everything
-    a.log_end :after_everything
-
-    a.active_recipe = nil
-  end
-
-  def after_create
-  end
-
-  def after_bundle
-  end
-
-  def after_everything
+    self.run :after_everything
   end
 
   def confirm?
@@ -76,5 +52,20 @@ class Sanji::Recipe
 
   def description
   end
+
+  protected
+
+  def run callback_name = ''
+    return unless self.respond_to? callback_name
+
+    a.active_recipe = self
+
+    a.log_start callback_name
+    self.send callback_name
+    a.log_end callback_name
+
+    a.active_recipe = nil
+  end
+
 
 end
