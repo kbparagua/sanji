@@ -36,7 +36,7 @@ class Sanji::Recipes::Gemfile < Sanji::Recipe
   end
 
   def group_header group = []
-    header = 'group '
+    header = "\ngroup "
 
     envs = group.map { |env| ":#{env}" }.join ', '
     header << "#{envs} do\n"

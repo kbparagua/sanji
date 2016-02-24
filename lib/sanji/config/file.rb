@@ -16,7 +16,7 @@ class Sanji::Config::File
       end
 
     @defaults = nil
-    @cookbooks = @contents['cookbooks']
+    @cookbooks = @contents['cookbooks'] || {}
     @cookbook_entries = {}
   end
 
@@ -45,7 +45,7 @@ class Sanji::Config::File
       if self.has_cookbook? key
         @cookbooks[key]
       elsif @defaults.present? && @defaults.has_cookbook?(key)
-        @defaults.cookbook key
+        @defaults.cookbook_by_key key
       else
         raise "Invalid cookbook: #{key}"
       end
