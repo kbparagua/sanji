@@ -23,7 +23,6 @@ cookbooks:
     - _basic
 
     recipes:
-    - ^_basic
     - _draper
     - _reform
     - _paloma
