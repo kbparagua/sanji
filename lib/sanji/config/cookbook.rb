@@ -8,18 +8,24 @@ class Sanji::Config::Cookbook
   def initialize name, contents = {}
     @name = name
     @contents = contents
-    @included_cookbooks = {}
+    @included_cookbooks = []
   end
 
   def include_cookbook cookbook
-    @included_cookbooks[cookbook.name] = cookbook
+    @included_cookbooks << cookbook
   end
 
   def recipes
-    @recipes ||=
-      @contents['recipes'].flat_map do |value|
-        self.create_recipe value
+    return @recipes if @recipes
+
+    @recipes = @included_cookbooks.flat_map &:recipes
+
+    @recipes +=
+      @contents['recipes'].flat_map do |recipe|
+        Sanji::Config::Recipe.new recipe
       end
+
+    @recipes
   end
 
   def optional_recipes
@@ -28,7 +34,7 @@ class Sanji::Config::Cookbook
     optional = @contents['optional'] || []
     optional.map! { |name| Sanji::Config::Recipe.new name }
 
-    @included_cookbooks.each do |_, cookbook|
+    @included_cookbooks.each do |cookbook|
       optional += cookbook.optional_recipes
     end
 
@@ -40,7 +46,7 @@ class Sanji::Config::Cookbook
 
     @gem_groups = self.own_gem_groups
 
-    @included_cookbooks.each do |_, cookbook|
+    @included_cookbooks.each do |cookbook|
       cookbook.gem_groups.each do |group, gems|
         @gem_groups[group] ||= []
         @gem_groups[group] += gems
@@ -66,25 +72,6 @@ class Sanji::Config::Cookbook
     end
 
     gem_groups
-  end
-
-  def create_recipe recipe_or_reference
-    if recipe_or_reference.start_with? COOKBOOK_REFERENCE_PREFIX
-      self.create_recipes_from_cookbook recipe_or_reference
-    else
-      Sanji::Config::Recipe.new recipe_or_reference
-    end
-  end
-
-  def create_recipes_from_cookbook reference
-    name = reference.sub COOKBOOK_REFERENCE_PREFIX, ''
-
-    unless @included_cookbooks.has_key? name
-      raise "You failed to include cookbook: #{name}."
-    end
-
-    cookbook = @included_cookbooks[name]
-    cookbook.recipes
   end
 
 end
