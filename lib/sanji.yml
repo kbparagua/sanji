@@ -1,7 +1,7 @@
 cookbook: _standard
 
 cookbooks:
-  basic:
+  _basic:
     recipes:
     - _postgresql
     - _gemfile
@@ -18,7 +18,7 @@ cookbooks:
       - thin
       - quiet_assets
 
-  standard:
+  _standard:
     include:
     - _basic
 
