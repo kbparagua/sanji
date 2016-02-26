@@ -7,11 +7,15 @@ module Sanji::Config
     def initialize name, contents = {}
       @name = name
       @contents = contents
-      @included_cookbooks = []
     end
 
-    def include_cookbook cookbook
-      @included_cookbooks << cookbook
+    def included_cookbooks
+      return @included_cookbooks if @included_cookbooks
+
+      cookbooks = @contents['include'] || []
+
+      @included_cookbooks =
+        cookbooks.map { |cookbook| CookbookBuilder.instance.build(cookbook) }
     end
 
     def recipes
@@ -58,17 +62,17 @@ module Sanji::Config
     end
 
     def included_recipes
-      @included_cookbooks.flat_map &:recipes
+      self.included_cookbooks.flat_map &:recipes
     end
 
     def included_optional_recipes
-      @included_cookbooks.flat_map &:optional_recipes
+      self.included_cookbooks.flat_map &:optional_recipes
     end
 
     def included_gem_groups
       gems_by_group = {}
 
-      @included_cookbooks.each do |cookbook|
+      self.included_cookbooks.each do |cookbook|
         cookbook.gem_groups.each do |group, gems|
           gems_by_group[group] ||= []
           gems_by_group[group] += gems

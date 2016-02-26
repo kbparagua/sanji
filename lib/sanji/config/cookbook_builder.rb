@@ -1,28 +1,19 @@
 module Sanji::Config
   class CookbookBuilder
 
+    def self.instance config_file = nil
+      return @instance unless config_file
+      @instance = self.new config_file
+    end
+
+
     def initialize config
       @config = config
     end
 
     def build name = ''
       entry = @config.cookbook_entry name
-      cookbook = Cookbook.new name, entry
-
-      included_cookbooks = entry['include'] || []
-      self.include_cookbooks cookbook, included_cookbooks
-
-      cookbook
-    end
-
-
-    protected
-
-    def include_cookbooks target, cookbooks = []
-      cookbooks.each do |cookbook_name|
-        cookbook = self.class.new(@config).build cookbook_name
-        target.include_cookbook cookbook
-      end
+      Cookbook.new name, entry
     end
 
   end
