@@ -4,7 +4,12 @@ require 'rails/generators/rails/app/app_generator'
 module Sanji
   class AppGenerator < Rails::Generators::AppGenerator
 
+    class_option :cookbook, :type => :string, :aliases => '-c',
+      :desc => 'Select cookbook to use'
+
     def finish_template
+      Config::Main.instance.set_cookbook_override options[:cookbook]
+
       invoke :sanji_after_create_tasks
       super
     end

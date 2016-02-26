@@ -1,13 +1,11 @@
 class Sanji::Config::Main
 
   CONFIG_FILENAME = 'sanji.yml'
-  # COOKBOOK_REFERENCE_PREFIX = '@'
 
 
   def self.instance
     @instance ||= self.new
   end
-
 
 
   def initialize
@@ -38,6 +36,19 @@ class Sanji::Config::Main
     end
   end
 
+  def set_cookbook_override cookbook_name
+    @cookbook_override = cookbook_name
+  end
+
+  def preferred_cookbook
+    return @preferred_cookbook if @preferred_cookbook
+
+    cookbook_builder = Sanji::Config::CookbookBuilder.new @config
+    cookbook_name = @cookbook_override || @config.preferred_cookbook
+
+    @preferred_cookbook = cookbook_builder.build cookbook_name
+  end
+
   def recipes
     @recipes ||= self.preferred_cookbook.recipes
   end
@@ -53,13 +64,6 @@ class Sanji::Config::Main
 
 
   protected
-
-  def preferred_cookbook
-    return @preferred_cookbook if @preferred_cookbook
-
-    cookbook_builder = Sanji::Config::CookbookBuilder.new @config
-    @preferred_cookbook = cookbook_builder.build @config.preferred_cookbook
-  end
 
   def get_default_config_file
     home_path = "#{File.dirname(__FILE__)}/../../"
