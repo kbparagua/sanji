@@ -1,5 +1,5 @@
 module Sanji::Config
-  class Sanji::Config::CookbookBuilder
+  class CookbookBuilder
 
     def initialize config
       @config = config
