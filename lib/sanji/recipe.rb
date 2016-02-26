@@ -14,7 +14,7 @@ class Sanji::Recipe
   end
 
   def optional?
-    Sanji::Options.instance.optional? self.class
+    Sanji::Config::Main.instance.optional? self.class
   end
 
   def run_after_create

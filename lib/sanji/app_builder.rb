@@ -41,7 +41,7 @@ module Sanji
     protected
 
     def recipe_classes
-      Options.instance.recipe_classes
+      Config::Main.instance.recipe_classes
     end
 
   end
