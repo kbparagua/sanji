@@ -8,11 +8,11 @@ class Sanji::Recipes::Setup < Sanji::Recipe
   protected
 
   def add_generators_block
-    a.application_config do |t|
-      t.indent(2).puts 'config.generators do |g|'
-      t.indent(3).puts '# sanji-generators'
-      t.indent(2).puts 'end'
-    end
+    config = "\t\tconfig.generators do |g|\n"
+    config << "\t\t\t# sanji-generators\n"
+    config << "\t\tend"
+
+    a.application_config config
   end
 
 end

@@ -20,9 +20,8 @@ class Sanji::Recipes::AdminNamespace < Sanji::Recipe
       self.create_layout
 
       a.insert_into_file 'app/controllers/admin/base_controller.rb',
-        :after => /ApplicationController\n/ do
-          a.text { |t| t.indent.puts "layout 'admin'" }
-        end
+        "\tlayout 'admin'\n",
+        :after => /ApplicationController\n/
     end
   end
 
@@ -30,11 +29,8 @@ class Sanji::Recipes::AdminNamespace < Sanji::Recipe
   protected
 
   def add_route
-    route =
-      a.text do |t|
-        t.puts 'namespace :admin do'
-        t.indent.puts 'end'
-      end
+    route = "namespace :admin do\n"
+    route << "\tend\n"
 
     a.route route
   end

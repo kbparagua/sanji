@@ -5,11 +5,6 @@ module Sanji
   module Utilities; end
 end
 
-# Require all utilities
-Dir["#{File.dirname(__FILE__)}/sanji/utilities/*.rb"].each do |filename|
-  require filename.sub(/\.rb\z/, '')
-end
-
 require 'sanji/config'
 require 'sanji/assistant'
 require 'sanji/app_generator'

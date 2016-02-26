@@ -23,22 +23,15 @@ class Sanji::Assistant
 
 
 
-  def text &block
-    Sanji::Utilities::Text.create &block
-  end
-
   def generator name, value
     self.builder.insert_into_file 'config/application.rb',
-      self.text { |t| t.indent(3).puts "g.#{name} #{value}" },
+      "\t\t\tg.#{name} #{value}\n",
       :after => "# sanji-generators\n"
   end
 
 
-  # `block` will have an Sanji::Utilities::Text instance as an argument.
-  def application_config &block
-    config = self.text &block
-
-    self.builder.insert_into_file 'config/application.rb', config,
+  def application_config text = ''
+    self.builder.insert_into_file 'config/application.rb', text,
       :after => "class Application < Rails::Application\n"
   end
 
