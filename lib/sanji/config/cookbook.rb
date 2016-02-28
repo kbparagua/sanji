@@ -22,6 +22,14 @@ module Sanji::Config
       @recipes ||= self.included_recipes + self.own_recipes
     end
 
+    def optional? recipe_class_name
+      self.optional_recipes.each do |recipe|
+        return true if recipe.full_class_name == recipe_class_name
+      end
+
+      false
+    end
+
     def optional_recipes
       @optional_recipes ||=
         self.included_optional_recipes + self.own_optional_recipes
@@ -33,7 +41,6 @@ module Sanji::Config
           own + other
         end
     end
-
 
 
     protected

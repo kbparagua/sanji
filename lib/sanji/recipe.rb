@@ -14,7 +14,7 @@ class Sanji::Recipe
   end
 
   def optional?
-    Sanji::Config::Main.instance.optional? self.class
+    Sanji::Config::Main.instance.preferred_cookbook.optional? self.class.name
   end
 
   def run_after_create

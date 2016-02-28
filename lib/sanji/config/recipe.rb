@@ -1,6 +1,6 @@
 class Sanji::Config::Recipe
 
-  SANJI_RECIPE_PREFIX = '_'
+  SANJI_PREFIX = '_'
 
   attr_reader :name
 
@@ -14,25 +14,32 @@ class Sanji::Config::Recipe
       if self.belongs_to_sanji?
         "Sanji::Recipes::#{self.class_name}"
       else
-        "Sanji::Locals::#{self.class_name}"
+        self.class_name
       end
   end
+
+  def class_instance
+    @class_instance ||= self.full_class_name.constantize
+  end
+
+
+
+  protected
 
   def class_name
-    @class_name ||= self.key_name.camelize
+    @class_name ||= self.name_without_prefix.camelize
   end
 
-  def key_name
-    @key_name ||=
-      if self.belongs_to_sanji?
-        self.name.sub SANJI_RECIPE_PREFIX, ''
-      else
-        self.name
-      end
+  def name_without_prefix
+    if self.belongs_to_sanji?
+      self.name.sub SANJI_PREFIX, ''
+    else
+      self.name
+    end
   end
 
   def belongs_to_sanji?
-    self.name.start_with? SANJI_RECIPE_PREFIX
+    self.name.start_with? SANJI_PREFIX
   end
 
 end

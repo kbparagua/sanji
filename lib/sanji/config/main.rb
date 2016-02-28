@@ -37,11 +37,6 @@ module Sanji::Config
       end
     end
 
-    def optional? recipe_class
-      optional = self.preferred_cookbook.optional_recipes.map &:class_name
-      optional.include? recipe_class.name.demodulize
-    end
-
     def set_cookbook_override cookbook_name
       @cookbook_override = cookbook_name
     end
@@ -56,14 +51,7 @@ module Sanji::Config
     end
 
     def recipe_classes
-      @recipe_classes ||=
-        self.recipes.map do |recipe|
-          recipe.full_class_name.constantize
-        end
-    end
-
-    def recipes
-      @recipes ||= self.preferred_cookbook.recipes
+      @recipe_classes ||= self.preferred_cookbook.recipes.map(&:class_instance)
     end
 
     def optional_recipes
