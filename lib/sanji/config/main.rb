@@ -50,10 +50,6 @@ module Sanji::Config
         CookbookBuilder.instance(@config).build cookbook_name
     end
 
-    def optional_recipes
-      @optional_recipes ||= self.preferred_cookbook.optional_recipes
-    end
-
     def gem_groups
       @gem_groups ||= self.preferred_cookbook.gem_groups
     end
