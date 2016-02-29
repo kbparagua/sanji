@@ -50,10 +50,6 @@ module Sanji::Config
         CookbookBuilder.instance(@config).build cookbook_name
     end
 
-    def recipe_classes
-      @recipe_classes ||= self.preferred_cookbook.recipes.map(&:class_instance)
-    end
-
     def optional_recipes
       @optional_recipes ||= self.preferred_cookbook.optional_recipes
     end
