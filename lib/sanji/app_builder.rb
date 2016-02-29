@@ -7,33 +7,21 @@ module Sanji
     end
 
     def after_create_tasks
-      Recipes::Setup.instance.run_after_create
-
       self.recipe_classes.each do |recipe_class|
         recipe_class.instance.run_after_create
       end
-
-      Recipes::Cleanup.instance.run_after_create
     end
 
     def after_bundle_tasks
-      Recipes::Setup.instance.run_after_bundle
-
       self.recipe_classes.each do |recipe_class|
         recipe_class.instance.run_after_bundle
       end
-
-      Recipes::Cleanup.instance.run_after_bundle
     end
 
     def after_everything_tasks
-      Recipes::Setup.instance.run_after_everything
-
       self.recipe_classes.each do |recipe_class|
         recipe_class.instance.run_after_everything
       end
-
-      Recipes::Cleanup.instance.run_after_everything
     end
 
 

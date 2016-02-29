@@ -24,14 +24,30 @@ class Sanji::Assistant
 
 
   def generator name, value
-    self.builder.insert_into_file 'config/application.rb',
-      "\t\t\tg.#{name} #{value}\n",
-      :after => "# sanji-generators\n"
+    app_rb_path = self.destination_path '/config/application.rb'
+    app_rb = File.read app_rb_path
+
+    if app_rb.include? 'config.generators'
+      self.builder.insert_into_file 'config/application.rb',
+        "#{tab 3}g.#{name} #{value}\n",
+        :after => /config\.generators do \|g\|\n/
+    else
+      config =
+        "config.generators do |g|\n" \
+        "#{tab}g.#{name} #{value}\n" \
+        "end\n"
+
+      self.application_config config
+    end
   end
 
-
   def application_config text = ''
-    self.builder.insert_into_file 'config/application.rb', text,
+    lines = text.split "\n"
+    indented_text = lines.map { |line| "#{tab 2}#{line}"}.join "\n"
+    indented_text << "\n"
+
+    self.builder.insert_into_file 'config/application.rb',
+      indented_text,
       :after => "class Application < Rails::Application\n"
   end
 
@@ -91,6 +107,10 @@ class Sanji::Assistant
 
   def no? question
     self.builder.no? recipe_message(apply_question_style("#{question} (y/n)"))
+  end
+
+  def tab number = 1
+    '  ' * number
   end
 
 
