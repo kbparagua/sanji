@@ -49,7 +49,7 @@ class Sanji::Recipes::Gemfile < Sanji::Recipe
   #   ['development', 'test'] => [gem1, gem2]
   # }
   def gem_groups
-    @gem_groups ||= Sanji::Config::Main.instance.preferred_cookbook.gem_groups
+    @gem_groups ||= $cookbook.gem_groups
   end
 
   def gemfile

@@ -41,7 +41,7 @@ module Sanji
     protected
 
     def recipe_classes
-      Config::Main.instance.preferred_cookbook.recipes.map &:class_instance
+      $cookbook.recipes.map &:class_instance
     end
 
   end

@@ -9,3 +9,5 @@ require 'sanji/app_generator'
 require 'sanji/app_builder'
 require 'sanji/recipe'
 require 'sanji/recipes'
+
+$cookbook = ::Sanji::Config::Main.instance.preferred_cookbook
