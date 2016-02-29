@@ -1,8 +1,6 @@
 module Sanji
   module Config; end
   module Recipes; end
-  module Locals; end
-  module Utilities; end
 end
 
 require 'sanji/config'
